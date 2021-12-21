@@ -1,5 +1,5 @@
 {
-  "window":{
+  "window": {
     "backgroundColor": "#5376ff",
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#5376ff",
@@ -7,7 +7,7 @@
   },
   "enablePullDownRefresh": true,
   "usingComponents": {
-    "van-icon": "@vant/weapp/icon/index",
-    "van-dialog": "@vant/weapp/dialog/index"
+    "van-notice-bar": "@vant/weapp/notice-bar/index",
+    "van-count-down": "@vant/weapp/count-down/index"
   }
 }

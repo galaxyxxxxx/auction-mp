@@ -1,0 +1,7 @@
+<view class="container">
+  <view class="wrapper">
+    <van-field input-class="input-title" model:value="{{ inputPrice }}" placeholder="请您输入出价金额" input-align="center" border="{{ false }}" bind:confirm="confirmPrice" type="number" auto-focus="{{true}}" />
+    <view class="tips">出价金额需不低于￥{{price}}</view>
+  </view>
+</view>
+<van-dialog id="van-dialog" />

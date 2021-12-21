@@ -1,0 +1,106 @@
+.banner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner,
+.bg,
+.bg image {
+  width: 100vw;
+  height: 408rpx;
+}
+
+.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.lenovo-logo,
+.title,
+.banner>.tips {
+  position: absolute;
+  z-index: 10;
+}
+
+.lenovo-logo,
+.lenovo-logo image {
+  width: 200rpx;
+  height: 44rpx;
+}
+
+.lenovo-logo {
+  left: 36rpx;
+  top: 36rpx;
+}
+
+.title {
+  letter-spacing: 1rpx;
+  color: #FFFFFF;
+  font-size: 48rpx;
+  line-height: 64rpx;
+  font-weight: bold;
+}
+
+.banner>.tips {
+  color: #FFFFFF;
+  font-size: 24rpx;
+  line-height: 32rpx;
+  opacity: 0.4;
+  right: 24rpx;
+  bottom: 22rpx;
+}
+
+.itcode-wrapper {
+  position: relative;
+  margin-top: 160rpx;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-title {
+  width: 416rpx;
+  height: 80rpx !important;
+  border-radius: 40rpx !important;
+  border: 2rpx solid #DCDCDC !important;
+  box-sizing: border-box !important;
+}
+
+.itcode-wrapper>.tips {
+  color: #000000;
+  font-size: 20rpx;
+  line-height: 28rpx;
+  opacity: 0.4;
+  margin-top: 20rpx;
+}
+
+
+.login-button {
+  position: absolute;
+  bottom: 120rpx;
+  width: 628rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  background: #FF0000;
+  border: 1px solid #ffffff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #FFFFFF;
+  font-size: 28rpx;
+  line-height: 38rpx;
+  font-weight: bold;
+  letter-spacing: 4rpx;
+}
+
+.login-button::after {
+  height: 0;
+  border: 1px solid #ffffff;
+  border-radius: 0 !important;
+}

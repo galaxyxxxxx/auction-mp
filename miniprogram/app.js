@@ -52,7 +52,7 @@ App({
         if (res.data.length == 0) {
           console.log("no user");
           wx.navigateTo({
-            url: '../login/login',
+            url: '../login/index',
           })
         } else {
           let userInfo = res.data[0];

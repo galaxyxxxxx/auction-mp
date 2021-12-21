@@ -14,10 +14,8 @@ van-icon {
 page {
   font-family: Helvetica;
   box-sizing: border-box;
+
   background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
 
   --font-size-XL: 70rpx;
   --font-size-L: 50rpx;
@@ -26,4 +24,6 @@ page {
   --font-size-XS: 20rpx;
 
   --color-theme: #3D78FF;
+
+  letter-spacing: 1rpx;
 }

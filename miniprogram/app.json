@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/login/login"
+    "pages/login/index",
+    "pages/painting/index",
+    "pages/auction/index"
   ],
   "window": {
     "backgroundColor": "#ffffff",
