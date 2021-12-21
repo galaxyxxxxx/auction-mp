@@ -2,9 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
 var utils_1 = require("../common/utils");
-var validator_1 = require("../common/validator");
 var DEFAULT_DURATION = 200;
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     classes: ['active-class'],
     props: {
         valueKey: String,
@@ -56,14 +55,14 @@ var DEFAULT_DURATION = 200;
             var data = this.data;
             var deltaY = event.touches[0].clientY - data.startY;
             this.setData({
-                offset: (0, utils_1.range)(data.startOffset + deltaY, -(this.getCount() * data.itemHeight), data.itemHeight),
+                offset: utils_1.range(data.startOffset + deltaY, -(this.getCount() * data.itemHeight), data.itemHeight),
             });
         },
         onTouchEnd: function () {
             var data = this.data;
             if (data.offset !== data.startOffset) {
                 this.setData({ duration: DEFAULT_DURATION });
-                var index = (0, utils_1.range)(Math.round(-data.offset / data.itemHeight), 0, this.getCount() - 1);
+                var index = utils_1.range(Math.round(-data.offset / data.itemHeight), 0, this.getCount() - 1);
                 this.setIndex(index, true);
             }
         },
@@ -74,7 +73,7 @@ var DEFAULT_DURATION = 200;
         adjustIndex: function (index) {
             var data = this.data;
             var count = this.getCount();
-            index = (0, utils_1.range)(index, 0, count);
+            index = utils_1.range(index, 0, count);
             for (var i = index; i < count; i++) {
                 if (!this.isDisabled(data.options[i]))
                     return i;
@@ -85,11 +84,11 @@ var DEFAULT_DURATION = 200;
             }
         },
         isDisabled: function (option) {
-            return (0, validator_1.isObj)(option) && option.disabled;
+            return utils_1.isObj(option) && option.disabled;
         },
         getOptionText: function (option) {
             var data = this.data;
-            return (0, validator_1.isObj)(option) && data.valueKey in option
+            return utils_1.isObj(option) && data.valueKey in option
                 ? option[data.valueKey]
                 : option;
         },

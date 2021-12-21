@@ -1,24 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var relation_1 = require("../common/relation");
 var component_1 = require("../common/component");
 function emit(target, value) {
     target.$emit('input', value);
     target.$emit('change', value);
 }
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     field: true,
-    relation: (0, relation_1.useParent)('checkbox-group'),
+    relation: {
+        name: 'checkbox-group',
+        type: 'ancestor',
+        current: 'checkbox',
+    },
     classes: ['icon-class', 'label-class'],
     props: {
         value: Boolean,
         disabled: Boolean,
         useIconSlot: Boolean,
         checkedColor: String,
-        labelPosition: {
-            type: String,
-            value: 'right',
-        },
+        labelPosition: String,
         labelDisabled: Boolean,
         shape: {
             type: String,
@@ -31,7 +31,6 @@ function emit(target, value) {
     },
     data: {
         parentDisabled: false,
-        direction: 'vertical',
     },
     methods: {
         emitChange: function (value) {

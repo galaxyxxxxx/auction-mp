@@ -1,5 +1,13 @@
 {
+  "window":{
+    "backgroundColor": "#5376ff",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#5376ff",
+    "navigationBarTitleText": "UXD Lab"
+  },
+  "enablePullDownRefresh": true,
   "usingComponents": {
-    "cloud-tip-modal": "/components/cloudTipModal/index"
+    "van-icon": "@vant/weapp/icon/index",
+    "van-dialog": "@vant/weapp/dialog/index"
   }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable */
 var array = require('./array.wxs');
 var object = require('./object.wxs');
 var PREFIX = 'van-';
@@ -36,4 +35,4 @@ function bem(name, conf) {
   return join(name, mods);
 }
 
-module.exports = bem;
+module.exports.bem = bem;

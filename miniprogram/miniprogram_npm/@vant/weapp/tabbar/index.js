@@ -1,12 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-var relation_1 = require("../common/relation");
-var utils_1 = require("../common/utils");
-(0, component_1.VantComponent)({
-    relation: (0, relation_1.useChildren)('tabbar-item', function () {
-        this.updateChildren();
-    }),
+component_1.VantComponent({
+    relation: {
+        name: 'tabbar-item',
+        type: 'descendant',
+        current: 'tabbar',
+        linked: function (target) {
+            target.parent = this;
+            target.updateFromParent();
+        },
+        unlinked: function () {
+            this.updateChildren();
+        },
+    },
     props: {
         active: {
             type: null,
@@ -23,11 +30,6 @@ var utils_1 = require("../common/utils");
         fixed: {
             type: Boolean,
             value: true,
-            observer: 'setHeight',
-        },
-        placeholder: {
-            type: Boolean,
-            observer: 'setHeight',
         },
         border: {
             type: Boolean,
@@ -42,27 +44,20 @@ var utils_1 = require("../common/utils");
             value: true,
         },
     },
-    data: {
-        height: 50,
-    },
     methods: {
         updateChildren: function () {
             var children = this.children;
             if (!Array.isArray(children) || !children.length) {
-                return;
+                return Promise.resolve();
             }
-            children.forEach(function (child) { return child.updateFromParent(); });
+            return Promise.all(children.map(function (child) { return child.updateFromParent(); }));
         },
-        setHeight: function () {
-            var _this = this;
-            if (!this.data.fixed || !this.data.placeholder) {
-                return;
+        onChange: function (child) {
+            var index = this.children.indexOf(child);
+            var active = child.data.name || index;
+            if (active !== this.data.active) {
+                this.$emit('change', active);
             }
-            wx.nextTick(function () {
-                (0, utils_1.getRect)(_this, '.van-tabbar').then(function (res) {
-                    _this.setData({ height: res.height });
-                });
-            });
         },
     },
 });

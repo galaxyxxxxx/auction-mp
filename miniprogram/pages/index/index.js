@@ -1,142 +1,194 @@
-// index.js
-// const app = getApp()
-const { envList } = require('../../envList.js');
+const app = getApp()
+const ENV = app.globalData.ENV
+const db = wx.cloud.database({
+  env: ENV
+})
+const lab = db.collection('lab')
+const user = db.collection('user')
+const _ = db.command
+const $ = db.command.aggregate
+
+import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog';
 
 Page({
   data: {
-    showUploadTip: false,
-    powerList: [{
-      title: '云函数',
-      tip: '安全、免鉴权运行业务代码',
-      showItem: false,
-      item: [{
-        title: '获取OpenId',
-        page: 'getOpenId'
-      },
-      //  {
-      //   title: '微信支付'
-      // },
-       {
-        title: '生成小程序码',
-        page: 'getMiniProgramCode'
-      },
-      // {
-      //   title: '发送订阅消息',
-      // }
-    ]
-    }, {
-      title: '数据库',
-      tip: '安全稳定的文档型数据库',
-      showItem: false,
-      item: [{
-        title: '创建集合',
-        page: 'createCollection'
-      }, {
-        title: '更新记录',
-        page: 'updateRecord'
-      }, {
-        title: '查询记录',
-        page: 'selectRecord'
-      }, {
-        title: '聚合操作',
-        page: 'sumRecord'
-      }]
-    }, {
-      title: '云存储',
-      tip: '自带CDN加速文件存储',
-      showItem: false,
-      item: [{
-        title: '上传文件',
-        page: 'uploadFile'
-      }]
-    }, {
-      title: '云托管',
-      tip: '不限语言的全托管容器服务',
-      showItem: false,
-      item: [{
-        title: '部署服务',
-        page: 'deployService'
-      }]
-    }],
-    envList,
-    selectedEnv: envList[0],
-    haveCreateCollection: false
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    isHide: false,
+
+    openid: wx.getStorageSync('oepnid'),
   },
 
-  onClickPowerInfo(e) {
-    const index = e.currentTarget.dataset.index;
-    const powerList = this.data.powerList;
-    powerList[index].showItem = !powerList[index].showItem;
-    if (powerList[index].title === '数据库' && !this.data.haveCreateCollection) {
-      this.onClickDatabase(powerList);
-    } else {
-      this.setData({
-        powerList
-      });
-    }
-  },
-
-  onChangeShowEnvChoose() {
-    wx.showActionSheet({
-      itemList: this.data.envList.map(i => i.alias),
-      success: (res) => {
-        this.onChangeSelectedEnv(res.tapIndex);
-      },
-      fail (res) {
-        console.log(res.errMsg);
-      }
-    });
-  },
-
-  onChangeSelectedEnv(index) {
-    if (this.data.selectedEnv.envId === this.data.envList[index].envId) {
-      return;
-    }
-    const powerList = this.data.powerList;
-    powerList.forEach(i => {
-      i.showItem = false;
-    });
-    this.setData({
-      selectedEnv: this.data.envList[index],
-      powerList,
-      haveCreateCollection: false
-    });
-  },
-
-  jumpPage(e) {
-    wx.navigateTo({
-      url: `/pages/${e.currentTarget.dataset.page}/index?envId=${this.data.selectedEnv.envId}`,
-    });
-  },
-
-  onClickDatabase(powerList) {
-    wx.showLoading({
-      title: '',
-    });
-    wx.cloud.callFunction({
-      name: 'quickstartFunctions',
-      config: {
-        env: this.data.selectedEnv.envId
-      },
-      data: {
-        type: 'createCollection'
-      }
-    }).then((resp) => {
-      if (resp.result.success) {
-        this.setData({
-          haveCreateCollection: true
+  // 获取当前设备的可视高度 以便适配各种机型
+  style: function () {
+    let that = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        that.setData({
+          width: res.windowWidth,
+          height: res.windowHeight
         });
       }
-      this.setData({
-        powerList
-      });
-      wx.hideLoading();
-    }).catch((e) => {
-      console.log(e);
-      this.setData({
-        showUploadTip: true
-      });
-      wx.hideLoading();
     });
+  },
+
+  onLoad: function (options) {
+
+  },
+
+  onShow: function () {
+
+  },
+
+  // 日期初始化
+  initDate: function () {
+    let that = this
+    let days = [{}, {}, {}, {}, {}, {}, {}]
+    let now = new Date()
+    let today = new Date(now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate())
+    let todayTime = today.getTime()
+    let oneday = 24 * 60 * 60 * 1000
+    for (let i = 0; i < 7; i++) {
+      let date = new Date(todayTime + oneday * i)
+      days[i].id = date
+      days[i].date = "周" + "日一二三四五六".charAt(date.getDay()) + '&nbsp;&nbsp;&nbsp;' + date.getDate()
+    }
+    that.setData({
+      days: days
+    })
+  },
+
+  // 查询相应的lab
+  getLab: function () {
+    let that = this
+    let tmp = that.data.days
+    that.data.days.map((cur, index) => {
+      let date = cur.id
+      lab.where({
+          date: date
+        })
+        .get({
+          success: function (res) {
+            tmp[index].labs = res.data
+            that.setData({
+              days: tmp,
+              openid: wx.getStorageSync('openid'),
+              nickName: wx.getStorageSync('nickName'),
+              loading: true
+            })
+            setTimeout(() => {
+              wx.hideLoading()
+            }, 0);
+          },
+          fail: function (err) {
+            console.log(err)
+          }
+        })
+    })
+  },
+
+  // 滚动事件
+  scroll(e) {
+    // console.log(e)
+  },
+
+  // 短按 查看、修改
+  viewLab(e) {
+    let id = e.currentTarget.dataset.id
+    let host = e.currentTarget.dataset.openid
+    if (this.data.openid == host) {
+      wx.navigateTo({
+        url: '../labEdit/labEdit?id=' + id,
+      })
+    } else {
+      wx.navigateTo({
+        url: '../labView/labView?id=' + id,
+      })
+    }
+  },
+
+  // 长按删除
+  delete(e) {
+    let id = e.currentTarget.dataset.id
+    let host = e.currentTarget.dataset.openid
+    let that = this
+    if (this.data.openid == host) {
+      Dialog.confirm({
+        title: '',
+        message: '取消该会议？',
+      }).then(() => {
+        lab.doc(id).remove({
+          success: function (res) {
+            console.log("已成功取消该活动")
+            that.onShow()
+          }
+        })
+      }).catch(() => {
+        console.log("取消 取消该活动")
+      });
+    } else {
+      console.log("无权限")
+    }
+  },
+
+
+
+  // 获取时间信息
+  getToday: function () {
+    let that = this
+    let today = {}
+    let date = new Date()
+    let month = date.getMonth() + 1
+
+    today.date = "周" + "日一二三四五六".charAt(date.getDay()) + "，" + (date.getMonth() + 1) + "月" + date.getDate() + "日"
+    today.year = date.getFullYear()
+    today.month = date.getMonth() + 1
+    today.day = date.getDate()
+    today.week = date.getDay() == 0 ? 7 : date.getDay()
+
+    that.setData({
+      today: today,
+      month: month
+    })
+  },
+
+  addLab: function (e) {
+    wx.navigateTo({
+      url: '../labEdit/labEdit',
+    })
+  },
+
+  me() {
+    wx.navigateTo({
+      url: '../labList/labList',
+    })
+  },
+
+  // 下拉刷新
+  onPullDownRefresh() {
+    wx.showLoading()
+    this.initDate();
+    this.getLab();
+    wx.stopPullDownRefresh();
+  },
+
+  // 分享
+  onShareAppMessage: function (res) {
+
+    return {
+      title: "实验室日程占用分享",
+      path: '../index/index'
+    }
+  },
+
+  touchStart(e) {
+    console.log(e)
+  },
+
+  touchMove(e) {
+    console.log('move', e)
+  },
+
+  touchEnd(e) {
+    console.log('end', e)
   }
-});
+})

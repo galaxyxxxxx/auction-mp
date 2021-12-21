@@ -1,16 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-var relation_1 = require("../common/relation");
-(0, component_1.VantComponent)({
-    relation: (0, relation_1.useChildren)('grid-item'),
+var utils_1 = require("../common/utils");
+component_1.VantComponent({
+    relation: {
+        name: 'grid-item',
+        type: 'descendant',
+        current: 'grid',
+    },
     props: {
         square: {
             type: Boolean,
             observer: 'updateChildren',
         },
         gutter: {
-            type: null,
+            type: [Number, String],
             value: 0,
             observer: 'updateChildren',
         },
@@ -41,11 +45,17 @@ var relation_1 = require("../common/relation");
             type: String,
             observer: 'updateChildren',
         },
-        reverse: {
-            type: Boolean,
-            value: false,
-            observer: 'updateChildren',
-        },
+    },
+    data: {
+        viewStyle: '',
+    },
+    created: function () {
+        var gutter = this.data.gutter;
+        if (gutter) {
+            this.setData({
+                viewStyle: "padding-left: " + utils_1.addUnit(gutter),
+            });
+        }
     },
     methods: {
         updateChildren: function () {

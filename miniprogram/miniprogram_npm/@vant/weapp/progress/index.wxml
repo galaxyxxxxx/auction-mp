@@ -1,20 +1,20 @@
 <wxs src="../wxs/utils.wxs" module="utils" />
-<wxs src="./index.wxs" module="computed" />
+<wxs src="./index.wxs" module="getters" />
 
 <view
   class="van-progress custom-class"
-  style="{{ computed.rootStyle({ strokeWidth, trackColor }) }}"
+  style="height: {{ utils.addUnit(strokeWidth) }}; {{ trackColor ? 'background: ' + trackColor : '' }}"
 >
   <view
     class="van-progress__portion"
-    style="{{ computed.portionStyle({ percentage, inactive, color }) }}"
+    style="width: {{ percentage }}%; background: {{ inactive ? '#cacaca' : color }}"
   >
     <view
-      wx:if="{{ showPivot && computed.pivotText(pivotText, percentage) }}"
-      style="{{ computed.pivotStyle({ textColor, pivotColor, inactive, color, right }) }}"
+      wx:if="{{ showPivot && getters.text(pivotText, percentage) }}"
+      style="color: {{ textColor }}; background: {{ pivotColor ? pivotColor : inactive ? '#cacaca' : color }}"
       class="van-progress__pivot"
     >
-      {{ computed.pivotText(pivotText, percentage) }}
+      {{ getters.text(pivotText, percentage) }}
     </view>
   </view>
 </view>

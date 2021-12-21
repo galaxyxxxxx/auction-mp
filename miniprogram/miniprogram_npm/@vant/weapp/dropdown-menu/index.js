@@ -1,14 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-var relation_1 = require("../common/relation");
 var utils_1 = require("../common/utils");
 var ARRAY = [];
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     field: true,
-    relation: (0, relation_1.useChildren)('dropdown-item', function () {
-        this.updateItemListData();
-    }),
+    relation: {
+        name: 'dropdown-item',
+        type: 'descendant',
+        current: 'dropdown-menu',
+        linked: function () {
+            this.updateItemListData();
+        },
+        unlinked: function () {
+            this.updateItemListData();
+        },
+    },
     props: {
         activeColor: {
             type: String,
@@ -47,7 +54,7 @@ var ARRAY = [];
         itemListData: [],
     },
     beforeCreate: function () {
-        var windowHeight = (0, utils_1.getSystemInfoSync)().windowHeight;
+        var windowHeight = wx.getSystemInfoSync().windowHeight;
         this.windowHeight = windowHeight;
         ARRAY.push(this);
     },
@@ -85,15 +92,15 @@ var ARRAY = [];
         getChildWrapperStyle: function () {
             var _this = this;
             var _a = this.data, zIndex = _a.zIndex, direction = _a.direction;
-            return (0, utils_1.getRect)(this, '.van-dropdown-menu').then(function (rect) {
+            return this.getRect('.van-dropdown-menu').then(function (rect) {
                 var _a = rect.top, top = _a === void 0 ? 0 : _a, _b = rect.bottom, bottom = _b === void 0 ? 0 : _b;
                 var offset = direction === 'down' ? bottom : _this.windowHeight - top;
                 var wrapperStyle = "z-index: " + zIndex + ";";
                 if (direction === 'down') {
-                    wrapperStyle += "top: " + (0, utils_1.addUnit)(offset) + ";";
+                    wrapperStyle += "top: " + utils_1.addUnit(offset) + ";";
                 }
                 else {
-                    wrapperStyle += "bottom: " + (0, utils_1.addUnit)(offset) + ";";
+                    wrapperStyle += "bottom: " + utils_1.addUnit(offset) + ";";
                 }
                 return wrapperStyle;
             });

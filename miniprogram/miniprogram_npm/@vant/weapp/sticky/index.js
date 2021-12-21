@@ -1,11 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = require("../common/utils");
 var component_1 = require("../common/component");
-var validator_1 = require("../common/validator");
 var page_scroll_1 = require("../mixins/page-scroll");
 var ROOT_ELEMENT = '.van-sticky';
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: {
         zIndex: {
             type: Number,
@@ -32,7 +30,7 @@ var ROOT_ELEMENT = '.van-sticky';
         },
     },
     mixins: [
-        (0, page_scroll_1.pageScrollMixin)(function (event) {
+        page_scroll_1.pageScrollMixin(function (event) {
             if (this.data.scrollTop != null) {
                 return;
             }
@@ -50,8 +48,8 @@ var ROOT_ELEMENT = '.van-sticky';
     methods: {
         onScroll: function (_a) {
             var _this = this;
-            var _b = _a === void 0 ? {} : _a, scrollTop = _b.scrollTop;
-            var _c = this.data, container = _c.container, offsetTop = _c.offsetTop, disabled = _c.disabled;
+            var scrollTop = (_a === void 0 ? {} : _a).scrollTop;
+            var _b = this.data, container = _b.container, offsetTop = _b.offsetTop, disabled = _b.disabled;
             if (disabled) {
                 this.setDataAfterDiff({
                     fixed: false,
@@ -61,10 +59,7 @@ var ROOT_ELEMENT = '.van-sticky';
             }
             this.scrollTop = scrollTop || this.scrollTop;
             if (typeof container === 'function') {
-                Promise.all([
-                    (0, utils_1.getRect)(this, ROOT_ELEMENT),
-                    this.getContainerRect(),
-                ]).then(function (_a) {
+                Promise.all([this.getRect(ROOT_ELEMENT), this.getContainerRect()]).then(function (_a) {
                     var root = _a[0], container = _a[1];
                     if (offsetTop + root.height > container.height + container.top) {
                         _this.setDataAfterDiff({
@@ -85,10 +80,7 @@ var ROOT_ELEMENT = '.van-sticky';
                 });
                 return;
             }
-            (0, utils_1.getRect)(this, ROOT_ELEMENT).then(function (root) {
-                if (!(0, validator_1.isDef)(root)) {
-                    return;
-                }
+            this.getRect(ROOT_ELEMENT).then(function (root) {
                 if (offsetTop >= root.top) {
                     _this.setDataAfterDiff({ fixed: true, height: root.height });
                     _this.transform = 0;
@@ -107,9 +99,7 @@ var ROOT_ELEMENT = '.van-sticky';
                     }
                     return prev;
                 }, {});
-                if (Object.keys(diff).length > 0) {
-                    _this.setData(diff);
-                }
+                _this.setData(diff);
                 _this.$emit('scroll', {
                     scrollTop: _this.scrollTop,
                     isFixed: data.fixed || _this.data.fixed,
@@ -118,7 +108,9 @@ var ROOT_ELEMENT = '.van-sticky';
         },
         getContainerRect: function () {
             var nodesRef = this.data.container();
-            return new Promise(function (resolve) { return nodesRef.boundingClientRect(resolve).exec(); });
+            return new Promise(function (resolve) {
+                return nodesRef.boundingClientRect(resolve).exec();
+            });
         },
     },
 });

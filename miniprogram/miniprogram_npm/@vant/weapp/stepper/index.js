@@ -12,7 +12,7 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-var validator_1 = require("../common/validator");
+var utils_1 = require("../common/utils");
 var LONG_PRESS_START_TIME = 600;
 var LONG_PRESS_INTERVAL = 200;
 // add num and avoid float number
@@ -23,21 +23,25 @@ function add(num1, num2) {
 function equal(value1, value2) {
     return String(value1) === String(value2);
 }
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     field: true,
     classes: ['input-class', 'plus-class', 'minus-class'],
     props: {
         value: {
             type: null,
-            observer: 'observeValue',
+            observer: function (value) {
+                if (!equal(value, this.data.currentValue)) {
+                    this.setData({ currentValue: this.format(value) });
+                }
+            },
         },
         integer: {
             type: Boolean,
             observer: 'check',
         },
         disabled: Boolean,
-        inputWidth: String,
-        buttonSize: String,
+        inputWidth: null,
+        buttonSize: null,
         asyncChange: Boolean,
         disableInput: Boolean,
         decimalLength: {
@@ -73,8 +77,6 @@ function equal(value1, value2) {
             type: Boolean,
             value: true,
         },
-        theme: String,
-        alwaysEmbed: Boolean,
     },
     data: {
         currentValue: '',
@@ -85,12 +87,6 @@ function equal(value1, value2) {
         });
     },
     methods: {
-        observeValue: function () {
-            var _a = this.data, value = _a.value, currentValue = _a.currentValue;
-            if (!equal(value, currentValue)) {
-                this.setData({ currentValue: this.format(value) });
-            }
-        },
         check: function () {
             var val = this.format(this.data.currentValue);
             if (!equal(val, this.data.currentValue)) {
@@ -98,11 +94,14 @@ function equal(value1, value2) {
             }
         },
         isDisabled: function (type) {
-            var _a = this.data, disabled = _a.disabled, disablePlus = _a.disablePlus, disableMinus = _a.disableMinus, currentValue = _a.currentValue, max = _a.max, min = _a.min;
             if (type === 'plus') {
-                return disabled || disablePlus || currentValue >= max;
+                return (this.data.disabled ||
+                    this.data.disablePlus ||
+                    this.data.currentValue >= this.data.max);
             }
-            return disabled || disableMinus || currentValue <= min;
+            return (this.data.disabled ||
+                this.data.disableMinus ||
+                this.data.currentValue <= this.data.min);
         },
         onFocus: function (event) {
             this.$emit('focus', event.detail);
@@ -127,7 +126,7 @@ function equal(value1, value2) {
             value = value === '' ? 0 : +value;
             value = Math.max(Math.min(this.data.max, value), this.data.min);
             // format decimal
-            if ((0, validator_1.isDef)(this.data.decimalLength)) {
+            if (utils_1.isDef(this.data.decimalLength)) {
                 value = value.toFixed(this.data.decimalLength);
             }
             return value;
@@ -140,7 +139,7 @@ function equal(value1, value2) {
             }
             var formatted = this.filter(value);
             // limit max decimal length
-            if ((0, validator_1.isDef)(this.data.decimalLength) && formatted.indexOf('.') !== -1) {
+            if (utils_1.isDef(this.data.decimalLength) && formatted.indexOf('.') !== -1) {
                 var pair = formatted.split('.');
                 formatted = pair[0] + "." + pair[1].slice(0, this.data.decimalLength);
             }

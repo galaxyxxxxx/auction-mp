@@ -23,7 +23,6 @@ var defaultOptions = {
     selector: '#van-dialog',
     className: '',
     asyncClose: false,
-    beforeClose: null,
     transition: 'scale',
     customStyle: '',
     messageAlign: '',
@@ -48,9 +47,7 @@ var Dialog = function (options) {
         delete options.context;
         delete options.selector;
         if (dialog) {
-            dialog.setData(__assign({ callback: function (action, instance) {
-                    action === 'confirm' ? resolve(instance) : reject(instance);
-                } }, options));
+            dialog.setData(__assign({ onCancel: reject, onConfirm: resolve }, options));
             wx.nextTick(function () {
                 dialog.setData({ show: true });
             });

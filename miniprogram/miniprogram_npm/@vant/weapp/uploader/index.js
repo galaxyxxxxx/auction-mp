@@ -15,12 +15,12 @@ var component_1 = require("../common/component");
 var utils_1 = require("./utils");
 var shared_1 = require("./shared");
 var validator_1 = require("../common/validator");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: __assign(__assign({ disabled: Boolean, multiple: Boolean, uploadText: String, useBeforeRead: Boolean, afterRead: null, beforeRead: null, previewSize: {
             type: null,
             value: 80,
         }, name: {
-            type: null,
+            type: [Number, String],
             value: '',
         }, accept: {
             type: String,
@@ -61,7 +61,8 @@ var validator_1 = require("../common/validator");
     methods: {
         formatFileList: function () {
             var _a = this.data, _b = _a.fileList, fileList = _b === void 0 ? [] : _b, maxCount = _a.maxCount;
-            var lists = fileList.map(function (item) { return (__assign(__assign({}, item), { isImage: (0, utils_1.isImageFile)(item), isVideo: (0, utils_1.isVideoFile)(item), deletable: (0, validator_1.isBoolean)(item.deletable) ? item.deletable : true })); });
+            var lists = fileList.map(function (item) { return (__assign(__assign({}, item), { isImage: utils_1.isImageFile(item), isVideo: utils_1.isVideoFile(item), deletable: validator_1.isBoolean(item.deletable) ? item.deletable : true })); });
+            console.log(lists);
             this.setData({ lists: lists, isInCount: lists.length < maxCount });
         },
         getDetail: function (index) {
@@ -72,11 +73,12 @@ var validator_1 = require("../common/validator");
         },
         startUpload: function () {
             var _this = this;
-            var _a = this.data, maxCount = _a.maxCount, multiple = _a.multiple, lists = _a.lists, disabled = _a.disabled;
+            var _a = this.data, maxCount = _a.maxCount, multiple = _a.multiple, accept = _a.accept, lists = _a.lists, disabled = _a.disabled;
             if (disabled)
                 return;
-            (0, utils_1.chooseFile)(__assign(__assign({}, this.data), { maxCount: maxCount - lists.length }))
+            utils_1.chooseFile(__assign(__assign({}, this.data), { maxCount: maxCount - lists.length }))
                 .then(function (res) {
+                console.log(res);
                 _this.onBeforeRead(multiple ? res : res[0]);
             })
                 .catch(function (error) {
@@ -100,7 +102,7 @@ var validator_1 = require("../common/validator");
             if (!res) {
                 return;
             }
-            if ((0, validator_1.isPromise)(res)) {
+            if (validator_1.isPromise(res)) {
                 res.then(function (data) { return _this.onAfterRead(data || file); });
             }
             else {
@@ -132,7 +134,7 @@ var validator_1 = require("../common/validator");
             var lists = this.data.lists;
             var item = lists[index];
             wx.previewImage({
-                urls: lists.filter(function (item) { return (0, utils_1.isImageFile)(item); }).map(function (item) { return item.url; }),
+                urls: lists.filter(function (item) { return utils_1.isImageFile(item); }).map(function (item) { return item.url; }),
                 current: item.url,
                 fail: function () {
                     wx.showToast({ title: '预览图片失败', icon: 'none' });
@@ -146,19 +148,12 @@ var validator_1 = require("../common/validator");
             var lists = this.data.lists;
             wx.previewMedia({
                 sources: lists
-                    .filter(function (item) { return (0, utils_1.isVideoFile)(item); })
+                    .filter(function (item) { return utils_1.isVideoFile(item); })
                     .map(function (item) { return (__assign(__assign({}, item), { type: 'video' })); }),
                 current: index,
                 fail: function () {
                     wx.showToast({ title: '预览视频失败', icon: 'none' });
                 },
-            });
-        },
-        onPreviewFile: function (event) {
-            var index = event.currentTarget.dataset.index;
-            wx.openDocument({
-                filePath: this.data.lists[index].url,
-                showMenu: true,
             });
         },
         onClickPreview: function (event) {

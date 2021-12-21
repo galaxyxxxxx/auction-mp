@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: {
         show: Boolean,
         customStyle: String,
@@ -12,10 +12,6 @@ var component_1 = require("../common/component");
         zIndex: {
             type: Number,
             value: 1,
-        },
-        lockScroll: {
-            type: Boolean,
-            value: true,
         },
     },
     methods: {

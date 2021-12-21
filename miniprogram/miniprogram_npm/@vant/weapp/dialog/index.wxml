@@ -5,7 +5,7 @@
   z-index="{{ zIndex }}"
   overlay="{{ overlay }}"
   transition="{{ transition }}"
-  custom-class="van-dialog van-dialog--{{ theme }} {{ className }}"
+  custom-class="van-dialog {{ overlay ? 'van-dialog--withoverlay' : '' }} van-dialog--{{ theme }} {{ className }}"
   custom-style="width: {{ utils.addUnit(width) }};{{ customStyle }}"
   overlay-style="{{ overlayStyle }}"
   close-on-click-overlay="{{ closeOnClickOverlay }}"
@@ -58,12 +58,12 @@
       app-parameter="{{ appParameter }}"
 
       bind:click="onConfirm"
-      bindgetuserinfo="onGetUserInfo"
-      bindcontact="onContact"
-      bindgetphonenumber="onGetPhoneNumber"
-      binderror="onError"
-      bindlaunchapp="onLaunchApp"
-      bindopensetting="onOpenSetting"
+      bindgetuserinfo="bindGetUserInfo"
+      bindcontact="bindContact"
+      bindgetphonenumber="bindGetPhoneNumber"
+      binderror="bindError"
+      bindlaunchapp="bindLaunchApp"
+      bindopensetting="bindOpenSetting"
     >
       {{ confirmButtonText }}
     </van-goods-action-button>
@@ -100,12 +100,12 @@
       app-parameter="{{ appParameter }}"
 
       bind:click="onConfirm"
-      bindgetuserinfo="onGetUserInfo"
-      bindcontact="onContact"
-      bindgetphonenumber="onGetPhoneNumber"
-      binderror="onError"
-      bindlaunchapp="onLaunchApp"
-      bindopensetting="onOpenSetting"
+      bindgetuserinfo="bindGetUserInfo"
+      bindcontact="bindContact"
+      bindgetphonenumber="bindGetPhoneNumber"
+      binderror="bindError"
+      bindlaunchapp="bindLaunchApp"
+      bindopensetting="bindOpenSetting"
     >
       {{ confirmButtonText }}
     </van-button>

@@ -13,7 +13,7 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
 var shared_1 = require("./shared");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     classes: ['active-class', 'toolbar-class', 'column-class'],
     props: __assign(__assign({}, shared_1.pickerProps), { valueKey: {
             type: String,
@@ -30,16 +30,14 @@ var shared_1 = require("./shared");
             observer: function (columns) {
                 if (columns === void 0) { columns = []; }
                 this.simple = columns.length && !columns[0].values;
+                this.children = this.selectAllComponents('.van-picker__column');
                 if (Array.isArray(this.children) && this.children.length) {
                     this.setColumns().catch(function () { });
                 }
             },
         } }),
     beforeCreate: function () {
-        var _this = this;
-        Object.defineProperty(this, 'children', {
-            get: function () { return _this.selectAllComponents('.van-picker__column') || []; },
-        });
+        this.children = [];
     },
     methods: {
         noop: function () { },
@@ -147,7 +145,9 @@ var shared_1 = require("./shared");
         },
         // get indexes of all columns
         getIndexes: function () {
-            return this.children.map(function (child) { return child.data.currentIndex; });
+            return this.children.map(function (child) {
+                return child.data.currentIndex;
+            });
         },
         // set indexes of all columns
         setIndexes: function (indexes) {

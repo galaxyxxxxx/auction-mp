@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
 var transition_1 = require("../mixins/transition");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     classes: [
         'enter-class',
         'enter-active-class',
@@ -11,5 +11,5 @@ var transition_1 = require("../mixins/transition");
         'leave-active-class',
         'leave-to-class',
     ],
-    mixins: [(0, transition_1.transition)(true)],
+    mixins: [transition_1.transition(true)],
 });

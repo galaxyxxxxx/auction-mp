@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var color_1 = require("../common/color");
 var component_1 = require("../common/component");
 var utils_1 = require("../common/utils");
-var validator_1 = require("../common/validator");
-var version_1 = require("../common/version");
+var color_1 = require("../common/color");
 var canvas_1 = require("./canvas");
 function format(rate) {
     return Math.min(Math.max(rate, 0), 100);
@@ -12,7 +10,7 @@ function format(rate) {
 var PERIMETER = 2 * Math.PI;
 var BEGIN_ANGLE = -Math.PI / 2;
 var STEP = 1;
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: {
         text: String,
         lineCap: {
@@ -41,7 +39,7 @@ var STEP = 1;
             value: color_1.WHITE,
         },
         color: {
-            type: null,
+            type: [String, Object],
             value: color_1.BLUE,
             observer: function () {
                 var _this = this;
@@ -70,11 +68,11 @@ var STEP = 1;
         getContext: function () {
             var _this = this;
             var _a = this.data, type = _a.type, size = _a.size;
-            if (type === '' || !(0, version_1.canIUseCanvas2d)()) {
+            if (type === '') {
                 var ctx = wx.createCanvasContext('van-circle', this);
                 return Promise.resolve(ctx);
             }
-            var dpr = (0, utils_1.getSystemInfoSync)().pixelRatio;
+            var dpr = wx.getSystemInfoSync().pixelRatio;
             return new Promise(function (resolve) {
                 wx.createSelectorQuery()
                     .in(_this)
@@ -89,14 +87,14 @@ var STEP = 1;
                         canvas.height = size * dpr;
                         ctx.scale(dpr, dpr);
                     }
-                    resolve((0, canvas_1.adaptor)(ctx));
+                    resolve(canvas_1.adaptor(ctx));
                 });
             });
         },
         setHoverColor: function () {
             var _this = this;
             var _a = this.data, color = _a.color, size = _a.size;
-            if ((0, validator_1.isObj)(color)) {
+            if (utils_1.isObj(color)) {
                 return this.getContext().then(function (context) {
                     var LinearColor = context.createLinearGradient(size, 0, 0, 0);
                     Object.keys(color)
@@ -159,33 +157,26 @@ var STEP = 1;
                 this.drawCircle(value);
                 return;
             }
-            this.clearMockInterval();
+            this.clearInterval();
             this.currentValue = this.currentValue || 0;
-            var run = function () {
-                _this.interval = setTimeout(function () {
-                    if (_this.currentValue !== value) {
-                        if (Math.abs(_this.currentValue - value) < STEP) {
-                            _this.currentValue = value;
-                        }
-                        else if (_this.currentValue < value) {
-                            _this.currentValue += STEP;
-                        }
-                        else {
-                            _this.currentValue -= STEP;
-                        }
-                        _this.drawCircle(_this.currentValue);
-                        run();
+            this.interval = setInterval(function () {
+                if (_this.currentValue !== value) {
+                    if (_this.currentValue < value) {
+                        _this.currentValue += STEP;
                     }
                     else {
-                        _this.clearMockInterval();
+                        _this.currentValue -= STEP;
                     }
-                }, 1000 / speed);
-            };
-            run();
+                    _this.drawCircle(_this.currentValue);
+                }
+                else {
+                    _this.clearInterval();
+                }
+            }, 1000 / speed);
         },
-        clearMockInterval: function () {
+        clearInterval: function () {
             if (this.interval) {
-                clearTimeout(this.interval);
+                clearInterval(this.interval);
                 this.interval = null;
             }
         },
@@ -198,6 +189,6 @@ var STEP = 1;
         });
     },
     destroyed: function () {
-        this.clearMockInterval();
+        this.clearInterval();
     },
 });

@@ -1,18 +1,21 @@
 /* eslint-disable */
-var style = require('../wxs/style.wxs');
-var addUnit = require('../wxs/add-unit.wxs');
+var utils = require('../wxs/utils.wxs');
 
 function inputStyle(autosize) {
   if (autosize && autosize.constructor === 'Object') {
-    return style({
-      'min-height': addUnit(autosize.minHeight),
-      'max-height': addUnit(autosize.maxHeight),
-    });
+    var style = '';
+    if (autosize.minHeight) {
+      style += 'min-height:' + utils.addUnit(autosize.minHeight) + ';';
+    }
+    if (autosize.maxHeight) {
+      style += 'max-height:' + utils.addUnit(autosize.maxHeight) + ';';
+    }
+    return style;
   }
 
   return '';
 }
 
 module.exports = {
-  inputStyle: inputStyle,
+  inputStyle: inputStyle
 };

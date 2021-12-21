@@ -2,12 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
 var utils_1 = require("../common/utils");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: {
         text: {
             type: String,
             value: '',
-            observer: 'init',
+            observer: function () {
+                var _this = this;
+                wx.nextTick(function () {
+                    _this.init();
+                });
+            },
         },
         mode: {
             type: String,
@@ -27,10 +32,18 @@ var utils_1 = require("../common/utils");
         },
         speed: {
             type: Number,
-            value: 60,
-            observer: 'init',
+            value: 50,
+            observer: function () {
+                var _this = this;
+                wx.nextTick(function () {
+                    _this.init();
+                });
+            },
         },
-        scrollable: null,
+        scrollable: {
+            type: Boolean,
+            value: true,
+        },
         leftIcon: {
             type: String,
             value: '',
@@ -52,39 +65,33 @@ var utils_1 = require("../common/utils");
     destroyed: function () {
         this.timer && clearTimeout(this.timer);
     },
-    mounted: function () {
-        this.init();
-    },
     methods: {
         init: function () {
             var _this = this;
-            (0, utils_1.requestAnimationFrame)(function () {
-                Promise.all([
-                    (0, utils_1.getRect)(_this, '.van-notice-bar__content'),
-                    (0, utils_1.getRect)(_this, '.van-notice-bar__wrap'),
-                ]).then(function (rects) {
-                    var contentRect = rects[0], wrapRect = rects[1];
-                    var _a = _this.data, speed = _a.speed, scrollable = _a.scrollable, delay = _a.delay;
-                    if (contentRect == null ||
-                        wrapRect == null ||
-                        !contentRect.width ||
-                        !wrapRect.width ||
-                        scrollable === false) {
-                        return;
-                    }
-                    if (scrollable || wrapRect.width < contentRect.width) {
-                        var duration = ((wrapRect.width + contentRect.width) / speed) * 1000;
-                        _this.wrapWidth = wrapRect.width;
-                        _this.contentWidth = contentRect.width;
-                        _this.duration = duration;
-                        _this.animation = wx.createAnimation({
-                            duration: duration,
-                            timingFunction: 'linear',
-                            delay: delay,
-                        });
-                        _this.scroll();
-                    }
-                });
+            Promise.all([
+                this.getRect('.van-notice-bar__content'),
+                this.getRect('.van-notice-bar__wrap'),
+            ]).then(function (rects) {
+                var contentRect = rects[0], wrapRect = rects[1];
+                if (contentRect == null ||
+                    wrapRect == null ||
+                    !contentRect.width ||
+                    !wrapRect.width) {
+                    return;
+                }
+                var _a = _this.data, speed = _a.speed, scrollable = _a.scrollable, delay = _a.delay;
+                if (scrollable && wrapRect.width < contentRect.width) {
+                    var duration = (contentRect.width / speed) * 1000;
+                    _this.wrapWidth = wrapRect.width;
+                    _this.contentWidth = contentRect.width;
+                    _this.duration = duration;
+                    _this.animation = wx.createAnimation({
+                        duration: duration,
+                        timingFunction: 'linear',
+                        delay: delay,
+                    });
+                    _this.scroll();
+                }
             });
         },
         scroll: function () {
@@ -97,7 +104,7 @@ var utils_1 = require("../common/utils");
                     .step()
                     .export(),
             });
-            (0, utils_1.requestAnimationFrame)(function () {
+            utils_1.requestAnimationFrame(function () {
                 _this.setData({
                     animationData: _this.animation
                         .translateX(-_this.contentWidth)

@@ -3,14 +3,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
 var touch_1 = require("../mixins/touch");
 var utils_1 = require("../common/utils");
-var validator_1 = require("../common/validator");
-var relation_1 = require("../common/relation");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     mixins: [touch_1.touch],
     classes: ['nav-class', 'tab-class', 'tab-active-class', 'line-class'],
-    relation: (0, relation_1.useChildren)('tab', function () {
-        this.updateTabs();
-    }),
+    relation: {
+        name: 'tab',
+        type: 'descendant',
+        current: 'tabs',
+        linked: function (target) {
+            target.index = this.children.length - 1;
+            this.updateTabs();
+        },
+        unlinked: function () {
+            this.children = this.children.map(function (child, index) {
+                child.index = index;
+                return child;
+            });
+            this.updateTabs();
+        },
+    },
     props: {
         sticky: Boolean,
         border: Boolean,
@@ -28,16 +39,16 @@ var relation_1 = require("../common/relation");
             },
         },
         lineWidth: {
-            type: null,
+            type: [String, Number],
             value: 40,
-            observer: 'resize',
+            observer: 'setLine',
         },
         lineHeight: {
-            type: null,
+            type: [String, Number],
             value: -1,
         },
         active: {
-            type: null,
+            type: [String, Number],
             value: 0,
             observer: function (name) {
                 if (name !== this.getCurrentName()) {
@@ -81,38 +92,41 @@ var relation_1 = require("../common/relation");
     },
     data: {
         tabs: [],
+        lineStyle: '',
         scrollLeft: 0,
         scrollable: false,
+        trackStyle: '',
         currentIndex: 0,
         container: null,
         skipTransition: true,
-        scrollWithAnimation: false,
         lineOffsetLeft: 0,
     },
     mounted: function () {
         var _this = this;
-        (0, utils_1.requestAnimationFrame)(function () {
-            _this.swiping = true;
-            _this.setData({
-                container: function () { return _this.createSelectorQuery().select('.van-tabs'); },
-            });
-            _this.resize();
+        wx.nextTick(function () {
+            _this.setLine(true);
             _this.scrollIntoView();
         });
     },
     methods: {
+        updateContainer: function () {
+            var _this = this;
+            this.setData({
+                container: function () { return _this.createSelectorQuery().select('.van-tabs'); },
+            });
+        },
         updateTabs: function () {
             var _a = this, _b = _a.children, children = _b === void 0 ? [] : _b, data = _a.data;
             this.setData({
                 tabs: children.map(function (child) { return child.data; }),
                 scrollable: this.children.length > data.swipeThreshold || !data.ellipsis,
             });
-            this.setCurrentIndexByName(data.active || this.getCurrentName());
+            this.setCurrentIndexByName(this.getCurrentName() || data.active);
         },
         trigger: function (eventName, child) {
             var currentIndex = this.data.currentIndex;
             var currentChild = child || this.children[currentIndex];
-            if (!(0, validator_1.isDef)(currentChild)) {
+            if (!utils_1.isDef(currentChild)) {
                 return;
             }
             this.$emit(eventName, {
@@ -130,7 +144,7 @@ var relation_1 = require("../common/relation");
             }
             else {
                 this.setCurrentIndex(index);
-                (0, utils_1.nextTick)(function () {
+                wx.nextTick(function () {
                     _this.trigger('click');
                 });
             }
@@ -146,29 +160,26 @@ var relation_1 = require("../common/relation");
         setCurrentIndex: function (currentIndex) {
             var _this = this;
             var _a = this, data = _a.data, _b = _a.children, children = _b === void 0 ? [] : _b;
-            if (!(0, validator_1.isDef)(currentIndex) ||
+            if (!utils_1.isDef(currentIndex) ||
                 currentIndex >= children.length ||
                 currentIndex < 0) {
                 return;
             }
-            (0, utils_1.groupSetData)(this, function () {
-                children.forEach(function (item, index) {
-                    var active = index === currentIndex;
-                    if (active !== item.data.active || !item.inited) {
-                        item.updateRender(active, _this);
-                    }
-                });
+            children.forEach(function (item, index) {
+                var active = index === currentIndex;
+                if (active !== item.data.active || !item.inited) {
+                    item.updateRender(active, _this);
+                }
             });
             if (currentIndex === data.currentIndex) {
                 return;
             }
             var shouldEmitChange = data.currentIndex !== null;
             this.setData({ currentIndex: currentIndex });
-            (0, utils_1.requestAnimationFrame)(function () {
-                _this.resize();
+            wx.nextTick(function () {
+                _this.setLine();
                 _this.scrollIntoView();
-            });
-            (0, utils_1.nextTick)(function () {
+                _this.updateContainer();
                 _this.trigger('input');
                 if (shouldEmitChange) {
                     _this.trigger('change');
@@ -181,15 +192,16 @@ var relation_1 = require("../common/relation");
                 return activeTab.getComputedName();
             }
         },
-        resize: function () {
+        setLine: function (skipTransition) {
             var _this = this;
+            if (skipTransition === void 0) { skipTransition = false; }
             if (this.data.type !== 'line') {
                 return;
             }
-            var _a = this.data, currentIndex = _a.currentIndex, ellipsis = _a.ellipsis, skipTransition = _a.skipTransition;
+            var currentIndex = this.data.currentIndex;
             Promise.all([
-                (0, utils_1.getAllRect)(this, '.van-tab'),
-                (0, utils_1.getRect)(this, '.van-tabs__line'),
+                utils_1.getAllRect.call(this, '.van-tab'),
+                utils_1.getRect.call(this, '.van-tabs__line'),
             ]).then(function (_a) {
                 var _b = _a[0], rects = _b === void 0 ? [] : _b, lineRect = _a[1];
                 var rect = rects[currentIndex];
@@ -199,27 +211,23 @@ var relation_1 = require("../common/relation");
                 var lineOffsetLeft = rects
                     .slice(0, currentIndex)
                     .reduce(function (prev, curr) { return prev + curr.width; }, 0);
-                lineOffsetLeft +=
-                    (rect.width - lineRect.width) / 2 + (ellipsis ? 0 : 8);
-                _this.setData({ lineOffsetLeft: lineOffsetLeft });
-                _this.swiping = true;
-                if (skipTransition) {
-                    (0, utils_1.nextTick)(function () {
-                        _this.setData({ skipTransition: false });
-                    });
-                }
+                lineOffsetLeft += (rect.width - lineRect.width) / 2;
+                _this.setData({
+                    lineOffsetLeft: lineOffsetLeft,
+                    skipTransition: skipTransition,
+                });
             });
         },
         // scroll active tab into view
         scrollIntoView: function () {
             var _this = this;
-            var _a = this.data, currentIndex = _a.currentIndex, scrollable = _a.scrollable, scrollWithAnimation = _a.scrollWithAnimation;
+            var _a = this.data, currentIndex = _a.currentIndex, scrollable = _a.scrollable;
             if (!scrollable) {
                 return;
             }
             Promise.all([
-                (0, utils_1.getAllRect)(this, '.van-tab'),
-                (0, utils_1.getRect)(this, '.van-tabs__nav'),
+                utils_1.getAllRect.call(this, '.van-tab'),
+                utils_1.getRect.call(this, '.van-tabs__nav'),
             ]).then(function (_a) {
                 var tabRects = _a[0], navRect = _a[1];
                 var tabRect = tabRects[currentIndex];
@@ -229,11 +237,6 @@ var relation_1 = require("../common/relation");
                 _this.setData({
                     scrollLeft: offsetLeft - (navRect.width - tabRect.width) / 2,
                 });
-                if (!scrollWithAnimation) {
-                    (0, utils_1.nextTick)(function () {
-                        _this.setData({ scrollWithAnimation: true });
-                    });
-                }
             });
         },
         onTouchScroll: function (event) {
@@ -245,13 +248,13 @@ var relation_1 = require("../common/relation");
             this.touchStart(event);
         },
         onTouchMove: function (event) {
-            if (!this.data.swipeable || !this.swiping)
+            if (!this.data.swipeable)
                 return;
             this.touchMove(event);
         },
         // watch swipe touch end
         onTouchEnd: function () {
-            if (!this.data.swipeable || !this.swiping)
+            if (!this.data.swipeable)
                 return;
             var _a = this, direction = _a.direction, deltaX = _a.deltaX, offsetX = _a.offsetX;
             var minSwipeDistance = 50;
@@ -261,7 +264,6 @@ var relation_1 = require("../common/relation");
                     this.setCurrentIndex(index);
                 }
             }
-            this.swiping = false;
         },
         getAvaiableTab: function (direction) {
             var _a = this.data, tabs = _a.tabs, currentIndex = _a.currentIndex;

@@ -1,11 +1,15 @@
 /* eslint-disable */
-var style = require('../wxs/style.wxs');
-
 function barStyle(data) {
-  return style({
-    'z-index': data.zIndex,
-    'padding-top': data.safeAreaInsetTop ? data.statusBarHeight + 'px' : 0,
-  });
+  var styles = [
+    ['z-index', data.zIndex],
+    ['padding-top', data.safeAreaInsetTop ? data.statusBarHeight + 'px' : 0],
+  ];
+
+  return styles
+    .map(function (item) {
+      return item.join(':');
+    })
+    .join(';');
 }
 
 module.exports = {

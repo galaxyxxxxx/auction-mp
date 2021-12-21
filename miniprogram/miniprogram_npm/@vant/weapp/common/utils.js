@@ -1,23 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCurrentPage = exports.toPromise = exports.groupSetData = exports.getAllRect = exports.getRect = exports.pickExclude = exports.requestAnimationFrame = exports.addUnit = exports.getSystemInfoSync = exports.nextTick = exports.range = exports.isDef = void 0;
+exports.getAllRect = exports.getRect = exports.pickExclude = exports.requestAnimationFrame = exports.addUnit = exports.getSystemInfoSync = exports.nextTick = exports.range = exports.isObj = exports.isDef = void 0;
 var validator_1 = require("./validator");
-var version_1 = require("./version");
-var validator_2 = require("./validator");
-Object.defineProperty(exports, "isDef", { enumerable: true, get: function () { return validator_2.isDef; } });
+function isDef(value) {
+    return value !== undefined && value !== null;
+}
+exports.isDef = isDef;
+function isObj(x) {
+    var type = typeof x;
+    return x !== null && (type === 'object' || type === 'function');
+}
+exports.isObj = isObj;
 function range(num, min, max) {
     return Math.min(Math.max(num, min), max);
 }
 exports.range = range;
-function nextTick(cb) {
-    if ((0, version_1.canIUseNextTick)()) {
-        wx.nextTick(cb);
-    }
-    else {
-        setTimeout(function () {
-            cb();
-        }, 1000 / 30);
-    }
+function nextTick(fn) {
+    setTimeout(function () {
+        fn();
+    }, 1000 / 30);
 }
 exports.nextTick = nextTick;
 var systemInfo;
@@ -29,19 +30,17 @@ function getSystemInfoSync() {
 }
 exports.getSystemInfoSync = getSystemInfoSync;
 function addUnit(value) {
-    if (!(0, validator_1.isDef)(value)) {
+    if (!isDef(value)) {
         return undefined;
     }
     value = String(value);
-    return (0, validator_1.isNumber)(value) ? value + "px" : value;
+    return validator_1.isNumber(value) ? value + "px" : value;
 }
 exports.addUnit = addUnit;
 function requestAnimationFrame(cb) {
     var systemInfo = getSystemInfoSync();
     if (systemInfo.platform === 'devtools') {
-        return setTimeout(function () {
-            cb();
-        }, 1000 / 30);
+        return nextTick(cb);
     }
     return wx
         .createSelectorQuery()
@@ -53,7 +52,7 @@ function requestAnimationFrame(cb) {
 }
 exports.requestAnimationFrame = requestAnimationFrame;
 function pickExclude(obj, keys) {
-    if (!(0, validator_1.isPlainObject)(obj)) {
+    if (!validator_1.isPlainObject(obj)) {
         return {};
     }
     return Object.keys(obj).reduce(function (prev, key) {
@@ -64,10 +63,11 @@ function pickExclude(obj, keys) {
     }, {});
 }
 exports.pickExclude = pickExclude;
-function getRect(context, selector) {
+function getRect(selector) {
+    var _this = this;
     return new Promise(function (resolve) {
         wx.createSelectorQuery()
-            .in(context)
+            .in(_this)
             .select(selector)
             .boundingClientRect()
             .exec(function (rect) {
@@ -77,10 +77,11 @@ function getRect(context, selector) {
     });
 }
 exports.getRect = getRect;
-function getAllRect(context, selector) {
+function getAllRect(selector) {
+    var _this = this;
     return new Promise(function (resolve) {
         wx.createSelectorQuery()
-            .in(context)
+            .in(_this)
             .selectAll(selector)
             .boundingClientRect()
             .exec(function (rect) {
@@ -90,24 +91,3 @@ function getAllRect(context, selector) {
     });
 }
 exports.getAllRect = getAllRect;
-function groupSetData(context, cb) {
-    if ((0, version_1.canIUseGroupSetData)()) {
-        context.groupSetData(cb);
-    }
-    else {
-        cb();
-    }
-}
-exports.groupSetData = groupSetData;
-function toPromise(promiseLike) {
-    if ((0, validator_1.isPromise)(promiseLike)) {
-        return promiseLike;
-    }
-    return Promise.resolve(promiseLike);
-}
-exports.toPromise = toPromise;
-function getCurrentPage() {
-    var pages = getCurrentPages();
-    return pages[pages.length - 1];
-}
-exports.getCurrentPage = getCurrentPage;

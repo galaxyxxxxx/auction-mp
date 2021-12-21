@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
 var transition_1 = require("../mixins/transition");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     classes: [
         'enter-class',
         'enter-active-class',
@@ -12,7 +12,7 @@ var transition_1 = require("../mixins/transition");
         'leave-to-class',
         'close-icon-class',
     ],
-    mixins: [(0, transition_1.transition)(false)],
+    mixins: [transition_1.transition(false)],
     props: {
         round: Boolean,
         closeable: Boolean,
@@ -54,10 +54,6 @@ var transition_1 = require("../mixins/transition");
         safeAreaInsetTop: {
             type: Boolean,
             value: false,
-        },
-        lockScroll: {
-            type: Boolean,
-            value: true,
         },
     },
     created: function () {

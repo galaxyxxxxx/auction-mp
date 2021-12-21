@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     classes: [
         'main-item-class',
         'content-item-class',
@@ -22,7 +22,7 @@ var component_1 = require("../common/component");
             observer: 'updateSubItems',
         },
         height: {
-            type: null,
+            type: [Number, String],
             value: 300,
         },
         max: {
@@ -64,7 +64,7 @@ var component_1 = require("../common/component");
         updateSubItems: function () {
             var _a = this.data, items = _a.items, mainActiveIndex = _a.mainActiveIndex;
             var _b = (items[mainActiveIndex] || {}).children, children = _b === void 0 ? [] : _b;
-            this.setData({ subItems: children });
+            return this.set({ subItems: children });
         },
     },
 });

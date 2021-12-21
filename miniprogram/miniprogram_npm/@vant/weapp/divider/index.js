@@ -1,14 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: {
-        dashed: Boolean,
-        hairline: Boolean,
-        contentPosition: String,
-        fontSize: String,
-        borderColor: String,
-        textColor: String,
-        customStyle: String,
+        dashed: {
+            type: Boolean,
+            value: false,
+        },
+        hairline: {
+            type: Boolean,
+            value: false,
+        },
+        contentPosition: {
+            type: String,
+            value: '',
+        },
+        fontSize: {
+            type: Number,
+            value: '',
+        },
+        borderColor: {
+            type: String,
+            value: '',
+        },
+        textColor: {
+            type: String,
+            value: '',
+        },
+        customStyle: {
+            type: String,
+            value: '',
+        },
     },
 });

@@ -1,5 +1,4 @@
 <wxs src="./index.wxs" module="computed" />
-<wxs src="../wxs/utils.wxs" module="utils" />
 
 <import src="./calendar.wxml" />
 
@@ -17,9 +16,16 @@
   bind:after-enter="onOpened"
   bind:after-leave="onClosed"
 >
-  <include src="./calendar.wxml" />
+  <template
+    is="calendar"
+    data="{{ title, subtitle, showTitle, showSubtitle, minDate, maxDate, type, color, showMark, formatter, rowHeight, currentDate, safeAreaInsetBottom, showConfirm, confirmDisabledText, confirmText, scrollIntoView, allowSameDay }}"
+  />
 </van-popup>
 
-<include wx:else src="./calendar.wxml" />
+<template
+  wx:else
+  is="calendar"
+  data="{{ title, subtitle, showTitle, showSubtitle, minDate, maxDate, type, color, showMark, formatter, rowHeight, currentDate, safeAreaInsetBottom, showConfirm, confirmDisabledText, confirmText, scrollIntoView, allowSameDay }}"
+/>
 
 <van-toast id="van-toast" />

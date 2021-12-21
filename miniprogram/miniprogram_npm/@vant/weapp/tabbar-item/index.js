@@ -1,33 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-var relation_1 = require("../common/relation");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: {
         info: null,
         name: null,
         icon: String,
         dot: Boolean,
-        iconPrefix: {
-            type: String,
-            value: 'van-icon',
-        },
     },
-    relation: (0, relation_1.useParent)('tabbar'),
+    relation: {
+        name: 'tabbar',
+        type: 'ancestor',
+        current: 'tabbar-item',
+    },
     data: {
         active: false,
-        activeColor: '',
-        inactiveColor: '',
     },
     methods: {
         onClick: function () {
-            var parent = this.parent;
-            if (parent) {
-                var index = parent.children.indexOf(this);
-                var active = this.data.name || index;
-                if (active !== this.data.active) {
-                    parent.$emit('change', active);
-                }
+            if (this.parent) {
+                this.parent.onChange(this);
             }
             this.$emit('click');
         },
@@ -50,9 +42,9 @@ var relation_1 = require("../common/relation");
             if (parentData.inactiveColor !== data.inactiveColor) {
                 patch.inactiveColor = parentData.inactiveColor;
             }
-            if (Object.keys(patch).length > 0) {
-                this.setData(patch);
-            }
+            return Object.keys(patch).length > 0
+                ? this.set(patch)
+                : Promise.resolve();
         },
     },
 });

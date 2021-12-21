@@ -1,23 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pageScrollMixin = void 0;
-var utils_1 = require("../common/utils");
+function getCurrentPage() {
+    var pages = getCurrentPages();
+    return pages[pages.length - 1] || {};
+}
 function onPageScroll(event) {
-    var _a = (0, utils_1.getCurrentPage)().vanPageScroller, vanPageScroller = _a === void 0 ? [] : _a;
+    var _a = getCurrentPage().vanPageScroller, vanPageScroller = _a === void 0 ? [] : _a;
     vanPageScroller.forEach(function (scroller) {
         if (typeof scroller === 'function') {
-            // @ts-ignore
             scroller(event);
         }
     });
 }
-var pageScrollMixin = function (scroller) {
+exports.pageScrollMixin = function (scroller) {
     return Behavior({
         attached: function () {
-            var page = (0, utils_1.getCurrentPage)();
-            if (!(0, utils_1.isDef)(page)) {
-                return;
-            }
+            var page = getCurrentPage();
             if (Array.isArray(page.vanPageScroller)) {
                 page.vanPageScroller.push(scroller.bind(this));
             }
@@ -30,13 +29,8 @@ var pageScrollMixin = function (scroller) {
             page.onPageScroll = onPageScroll;
         },
         detached: function () {
-            var _a;
-            var page = (0, utils_1.getCurrentPage)();
-            if ((0, utils_1.isDef)(page)) {
-                page.vanPageScroller =
-                    ((_a = page.vanPageScroller) === null || _a === void 0 ? void 0 : _a.filter(function (item) { return item !== scroller; })) || [];
-            }
+            var page = getCurrentPage();
+            page.vanPageScroller = (page.vanPageScroller || []).filter(function (item) { return item !== scroller; });
         },
     });
 };
-exports.pageScrollMixin = pageScrollMixin;

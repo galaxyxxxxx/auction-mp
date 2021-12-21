@@ -1,25 +1,37 @@
 /* eslint-disable */
-var style = require('../wxs/style.wxs');
-var addUnit = require('../wxs/add-unit.wxs');
-
 function wrapStyle(data) {
-  return style({
-    transform: data.transform
-      ? 'translate3d(0, ' + data.transform + 'px, 0)'
-      : '',
-    top: data.fixed ? addUnit(data.offsetTop) : '',
-    'z-index': data.zIndex,
-  });
+  var style = '';
+
+  if (data.transform) {
+    style += 'transform: translate3d(0, ' + data.transform + 'px, 0);';
+  }
+
+  if (data.fixed) {
+    style += 'top: ' + data.offsetTop + 'px;';
+  }
+
+  if (data.zIndex) {
+    style += 'z-index: ' + data.zIndex + ';';
+  }
+
+  return style;
 }
 
 function containerStyle(data) {
-  return style({
-    height: data.fixed ? addUnit(data.height) : '',
-    'z-index': data.zIndex,
-  });
+  var style = '';
+
+  if (data.fixed) {
+    style += 'height: ' + data.height + 'px;';
+  }
+
+  if (data.zIndex) {
+    style += 'z-index: ' + data.zIndex + ';';
+  }
+
+  return style;
 }
 
 module.exports = {
   wrapStyle: wrapStyle,
-  containerStyle: containerStyle,
+  containerStyle: containerStyle
 };

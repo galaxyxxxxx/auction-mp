@@ -1,12 +1,18 @@
 /* eslint-disable */
-var style = require('../wxs/style.wxs');
-var addUnit = require('../wxs/add-unit.wxs');
+var utils = require('../wxs/utils.wxs');
 
 function barStyle(barHeight, activeColor) {
-  return style({
-    height: addUnit(barHeight),
-    background: activeColor,
-  });
+  var styles = [['height', utils.addUnit(barHeight)]];
+
+  if (activeColor) {
+    styles.push(['background', activeColor]);
+  }
+
+  return styles
+    .map(function (item) {
+      return item.join(':');
+    })
+    .join(';');
 }
 
 module.exports = {

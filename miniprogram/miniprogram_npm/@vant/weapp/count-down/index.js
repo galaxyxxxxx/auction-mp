@@ -5,7 +5,7 @@ var utils_1 = require("./utils");
 function simpleTick(fn) {
     return setTimeout(fn, 30);
 }
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: {
         useSlot: Boolean,
         millisecond: Boolean,
@@ -23,7 +23,7 @@ function simpleTick(fn) {
         },
     },
     data: {
-        timeData: (0, utils_1.parseTimeData)(0),
+        timeData: utils_1.parseTimeData(0),
         formattedTime: '0',
     },
     destroyed: function () {
@@ -75,7 +75,7 @@ function simpleTick(fn) {
             var _this = this;
             this.tid = simpleTick(function () {
                 var remain = _this.getRemain();
-                if (!(0, utils_1.isSameSecond)(remain, _this.remain) || remain === 0) {
+                if (!utils_1.isSameSecond(remain, _this.remain) || remain === 0) {
                     _this.setRemain(remain);
                 }
                 if (_this.remain !== 0) {
@@ -88,12 +88,12 @@ function simpleTick(fn) {
         },
         setRemain: function (remain) {
             this.remain = remain;
-            var timeData = (0, utils_1.parseTimeData)(remain);
+            var timeData = utils_1.parseTimeData(remain);
             if (this.data.useSlot) {
                 this.$emit('change', timeData);
             }
             this.setData({
-                formattedTime: (0, utils_1.parseFormat)(this.data.format, timeData),
+                formattedTime: utils_1.parseFormat(this.data.format, timeData),
             });
             if (remain === 0) {
                 this.pause();

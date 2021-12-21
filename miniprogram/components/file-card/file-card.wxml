@@ -1,0 +1,22 @@
+<view class="card">
+  <view class="icon">
+    <image src="{{icon}}" alt="icon"></image>
+  </view>
+  <view class="content">
+    <view class="title">{{title}}</view>
+    <view class="detail">{{description}}</view>
+  </view>
+
+  <view class="status" wx:if="{{type == 1}}">
+    <image src="{{moreIcon}}" alt="more"></image>
+  </view>
+
+  <view class="status" wx:else>
+    <view wx:if="{{status == 1}}" >
+      <image src="{{downloadIcon}}" alt="download"></image>
+    </view>
+    <view wx:else>
+      <image src="{{shareIcon}}" alt="share"></image>
+    </view>
+  </view>
+</view>

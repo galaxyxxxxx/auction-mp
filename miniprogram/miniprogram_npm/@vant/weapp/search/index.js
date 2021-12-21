@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
 var version_1 = require("../common/version");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     field: true,
     classes: ['field-class', 'input-class', 'cancel-class'],
     props: {
@@ -43,18 +43,10 @@ var version_1 = require("../common/version");
             type: Boolean,
             value: true,
         },
-        clearTrigger: {
-            type: String,
-            value: 'focus',
-        },
-        clearIcon: {
-            type: String,
-            value: 'clear',
-        },
     },
     methods: {
         onChange: function (event) {
-            if ((0, version_1.canIUseModel)()) {
+            if (version_1.canIUseModel()) {
                 this.setData({ value: event.detail });
             }
             this.$emit('change', event.detail);
@@ -66,7 +58,7 @@ var version_1 = require("../common/version");
              * https://github.com/youzan/@vant/weapp/issues/1768
              */
             setTimeout(function () {
-                if ((0, version_1.canIUseModel)()) {
+                if (version_1.canIUseModel()) {
                     _this.setData({ value: '' });
                 }
                 _this.$emit('cancel');
@@ -84,9 +76,6 @@ var version_1 = require("../common/version");
         },
         onClear: function (event) {
             this.$emit('clear', event.detail);
-        },
-        onClickInput: function (event) {
-            this.$emit('click-input', event.detail);
         },
     },
 });

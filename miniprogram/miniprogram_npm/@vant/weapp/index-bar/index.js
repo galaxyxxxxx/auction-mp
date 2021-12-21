@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var color_1 = require("../common/color");
 var component_1 = require("../common/component");
-var relation_1 = require("../common/relation");
-var utils_1 = require("../common/utils");
+var color_1 = require("../common/color");
 var page_scroll_1 = require("../mixins/page-scroll");
 var indexList = function () {
     var indexList = [];
@@ -13,10 +11,18 @@ var indexList = function () {
     }
     return indexList;
 };
-(0, component_1.VantComponent)({
-    relation: (0, relation_1.useChildren)('index-anchor', function () {
-        this.updateData();
-    }),
+component_1.VantComponent({
+    relation: {
+        name: 'index-anchor',
+        type: 'descendant',
+        current: 'index-bar',
+        linked: function () {
+            this.updateData();
+        },
+        unlinked: function () {
+            this.updateData();
+        },
+    },
     props: {
         sticky: {
             type: Boolean,
@@ -40,8 +46,8 @@ var indexList = function () {
         },
     },
     mixins: [
-        (0, page_scroll_1.pageScrollMixin)(function (event) {
-            this.scrollTop = (event === null || event === void 0 ? void 0 : event.scrollTop) || 0;
+        page_scroll_1.pageScrollMixin(function (event) {
+            this.scrollTop = event.scrollTop || 0;
             this.onScroll();
         }),
     ],
@@ -79,7 +85,9 @@ var indexList = function () {
         setAnchorsRect: function () {
             var _this = this;
             return Promise.all(this.children.map(function (anchor) {
-                return (0, utils_1.getRect)(anchor, '.van-index-anchor-wrapper').then(function (rect) {
+                return anchor
+                    .getRect('.van-index-anchor-wrapper')
+                    .then(function (rect) {
                     Object.assign(anchor, {
                         height: rect.height,
                         top: rect.top + _this.scrollTop,
@@ -89,7 +97,7 @@ var indexList = function () {
         },
         setListRect: function () {
             var _this = this;
-            return (0, utils_1.getRect)(this, '.van-index-bar').then(function (rect) {
+            return this.getRect('.van-index-bar').then(function (rect) {
                 Object.assign(_this, {
                     height: rect.height,
                     top: rect.top + _this.scrollTop,
@@ -98,10 +106,7 @@ var indexList = function () {
         },
         setSiderbarRect: function () {
             var _this = this;
-            return (0, utils_1.getRect)(this, '.van-index-bar__sidebar').then(function (res) {
-                if (!(0, utils_1.isDef)(res)) {
-                    return;
-                }
+            return this.getRect('.van-index-bar__sidebar').then(function (res) {
                 _this.sidebar = {
                     height: res.height,
                     top: res.top,
@@ -121,7 +126,9 @@ var indexList = function () {
             }
         },
         getAnchorRect: function (anchor) {
-            return (0, utils_1.getRect)(anchor, '.van-index-anchor-wrapper').then(function (rect) { return ({
+            return anchor
+                .getRect('.van-index-anchor-wrapper')
+                .then(function (rect) { return ({
                 height: rect.height,
                 top: rect.top,
             }); });
@@ -230,7 +237,9 @@ var indexList = function () {
                 return;
             }
             this.scrollToAnchorIndex = index;
-            var anchor = this.children.find(function (item) { return item.data.index === _this.data.indexList[index]; });
+            var anchor = this.children.find(function (item) {
+                return item.data.index === _this.data.indexList[index];
+            });
             if (anchor) {
                 anchor.scrollIntoView(this.scrollTop);
                 this.$emit('select', anchor.data.index);

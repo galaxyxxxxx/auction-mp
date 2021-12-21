@@ -5,7 +5,7 @@ var touch_1 = require("../mixins/touch");
 var utils_1 = require("../common/utils");
 var THRESHOLD = 0.3;
 var ARRAY = [];
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     props: {
         disabled: Boolean,
         leftWidth: {
@@ -30,14 +30,13 @@ var ARRAY = [];
         },
         asyncClose: Boolean,
         name: {
-            type: null,
+            type: [Number, String],
             value: '',
         },
     },
     mixins: [touch_1.touch],
     data: {
         catchMove: false,
-        wrapperStyle: '',
     },
     created: function () {
         this.offset = 0;
@@ -62,7 +61,7 @@ var ARRAY = [];
         },
         swipeMove: function (offset) {
             if (offset === void 0) { offset = 0; }
-            this.offset = (0, utils_1.range)(offset, -this.data.rightWidth, this.data.leftWidth);
+            this.offset = utils_1.range(offset, -this.data.rightWidth, this.data.leftWidth);
             var transform = "translate3d(" + this.offset + "px, 0, 0)";
             var transition = this.dragging
                 ? 'none'
@@ -103,7 +102,7 @@ var ARRAY = [];
                 return;
             }
             this.dragging = true;
-            ARRAY.filter(function (item) { return item !== _this && item.offset !== 0; }).forEach(function (item) { return item.close(); });
+            ARRAY.filter(function (item) { return item !== _this; }).forEach(function (item) { return item.close(); });
             this.setData({ catchMove: true });
             this.swipeMove(this.startOffset + this.deltaX);
         },

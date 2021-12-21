@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
 var color_1 = require("../common/color");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     classes: ['desc-class'],
     props: {
         icon: String,

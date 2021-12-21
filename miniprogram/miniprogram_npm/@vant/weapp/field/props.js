@@ -51,7 +51,6 @@ exports.inputProps = {
     password: Boolean,
     confirmType: String,
     confirmHold: Boolean,
-    alwaysEmbed: Boolean,
 };
 exports.textareaProps = {
     autoHeight: Boolean,

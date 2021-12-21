@@ -11,10 +11,9 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = require("../common/utils");
 var component_1 = require("../common/component");
 var version_1 = require("../common/version");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     field: true,
     classes: ['icon-class'],
     props: {
@@ -38,9 +37,18 @@ var version_1 = require("../common/version");
             type: String,
             value: 'star-o',
         },
-        color: String,
-        voidColor: String,
-        disabledColor: String,
+        color: {
+            type: String,
+            value: '#ffd21e',
+        },
+        voidColor: {
+            type: String,
+            value: '#c7c7c7',
+        },
+        disabledColor: {
+            type: String,
+            value: '#bdbdbd',
+        },
         count: {
             type: Number,
             value: 5,
@@ -65,7 +73,7 @@ var version_1 = require("../common/version");
             var score = event.currentTarget.dataset.score;
             if (!data.disabled && !data.readonly) {
                 this.setData({ innerValue: score + 1 });
-                if ((0, version_1.canIUseModel)()) {
+                if (version_1.canIUseModel()) {
                     this.setData({ value: score + 1 });
                 }
                 wx.nextTick(function () {
@@ -80,9 +88,9 @@ var version_1 = require("../common/version");
             if (!touchable)
                 return;
             var clientX = event.touches[0].clientX;
-            (0, utils_1.getAllRect)(this, '.van-rate__icon').then(function (list) {
+            this.getRect('.van-rate__icon', true).then(function (list) {
                 var target = list
-                    .sort(function (cur, next) { return cur.dataset.score - next.dataset.score; })
+                    .sort(function (item) { return item.right - item.left; })
                     .find(function (item) { return clientX >= item.left && clientX <= item.right; });
                 if (target != null) {
                     _this.onSelect(__assign(__assign({}, event), { currentTarget: target }));

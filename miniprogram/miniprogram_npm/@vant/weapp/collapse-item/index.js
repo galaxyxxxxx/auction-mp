@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("../common/component");
-var relation_1 = require("../common/relation");
-var animate_1 = require("./animate");
-(0, component_1.VantComponent)({
+component_1.VantComponent({
     classes: ['title-class', 'content-class'],
-    relation: (0, relation_1.useParent)('collapse'),
+    relation: {
+        name: 'collapse',
+        type: 'ancestor',
+        current: 'collapse-item',
+    },
     props: {
         name: null,
         title: null,
@@ -26,14 +28,20 @@ var animate_1 = require("./animate");
     data: {
         expanded: false,
     },
+    created: function () {
+        this.animation = wx.createAnimation({
+            duration: 0,
+            timingFunction: 'ease-in-out',
+        });
+    },
     mounted: function () {
         this.updateExpanded();
-        this.mounted = true;
+        this.inited = true;
     },
     methods: {
         updateExpanded: function () {
             if (!this.parent) {
-                return;
+                return Promise.resolve();
             }
             var _a = this.parent.data, value = _a.value, accordion = _a.accordion;
             var _b = this.parent.children, children = _b === void 0 ? [] : _b;
@@ -44,9 +52,45 @@ var animate_1 = require("./animate");
                 ? value === currentName
                 : (value || []).some(function (name) { return name === currentName; });
             if (expanded !== this.data.expanded) {
-                (0, animate_1.setContentAnimate)(this, expanded, this.mounted);
+                this.updateStyle(expanded);
             }
             this.setData({ index: index, expanded: expanded });
+        },
+        updateStyle: function (expanded) {
+            var _this = this;
+            var inited = this.inited;
+            this.getRect('.van-collapse-item__content')
+                .then(function (rect) {
+                return rect.height;
+            })
+                .then(function (height) {
+                var animation = _this.animation;
+                if (expanded) {
+                    if (height === 0) {
+                        animation.height('auto').top(1).step();
+                    }
+                    else {
+                        animation
+                            .height(height)
+                            .top(1)
+                            .step({
+                            duration: inited ? 300 : 1,
+                        })
+                            .height('auto')
+                            .step();
+                    }
+                    _this.setData({
+                        animation: animation.export(),
+                    });
+                    return;
+                }
+                animation.height(height).top(0).step({ duration: 1 }).height(0).step({
+                    duration: 300,
+                });
+                _this.setData({
+                    animation: animation.export(),
+                });
+            });
         },
         onClick: function () {
             if (this.data.disabled) {
