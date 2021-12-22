@@ -1,57 +1,145 @@
+const app = getApp()
+const ENV = app.globalData.ENV
+const CLOUD_BASE = app.globalData.CLOUD_BASE
+const db = wx.cloud.database({
+  env: ENV
+})
+const painting = db.collection('painting')
+const auction = db.collection('auction')
+const _ = db.command
+
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog';
+
 Page({
 
   data: {
     price: 0,
+    _id: 0,
     inputPrice: ''
   },
 
   onLoad: function (options) {
     let price = options.price
+    let _id = options._id
     this.setData({
-      price: price
+      price: price,
+      _id: _id
     })
   },
 
   confirmPrice(e) {
-    let cur = e.detail
-    // 检验报价是否合规
-    if (cur <= this.data.price) {
+    let cur = parseInt(e.detail) //当前用户的报价
+    let _id = this.data._id
+    let price = parseInt(this.data.price)
+    // 1 检验报价是否合规
+    if (cur <= price) {
       // 弹窗或别的方式 警示
       Dialog.alert({
-        title: '',
         message: '出价不能低于当前报价，请重新报价',
         theme: 'round-button',
       }).then(() => {
-        // on close
         this.setData({
-          inputPrice: 0
-        })
-      });
-    }
-    // 检验是否已有更高报价 
-    else if (1) {
-      // 弹窗或别的方式 警示
-      Dialog.alert({
-        title: '有新报价',
-        message: '有新报价**元，请重新报价',
-        theme: 'round-button',
-      }).then(() => {
-        // on close
-        this.setData({
-          inputPrice: 0
+          inputPrice: ''
         })
       });
     } else {
-      // 弹窗 报价成功
-      wx.showToast({
-        title: '成功报价',
-        icon: 'success',
-        duration: 2000
+      // 2 查看该用户是否已报价
+      auction.where({
+        openid: wx.getStorageSync('openid'),
+        paintingId: _id
+      }).get({
+        success: function (res) {
+          if (res.data.length === 0) {
+            // 该用户没有报价过
+            // 3 增加报价
+            painting.doc(_id).update({
+              data: {
+                count: _.inc(1),
+                price: cur,
+                buyer: wx.getStorageSync('openid')
+              },
+              success: function (res) {
+                auction.add({
+                  data: {
+                    openid: wx.getStorageSync('openid'),
+                    avatar: wx.getStorageSync('avatarUrl'),
+                    nickName: wx.getStorageSync('nickName'),
+                    paintingId: _id,
+                    price: cur
+                  },
+                  success: function (res) {
+                    wx.showToast({
+                      title: '成功报价',
+                      icon: 'success',
+                      duration: 2000
+                    })
+                    setTimeout(() => {
+                      wx.navigateBack({
+                        delta: 0,
+                      })
+                    }, 2000)
+                  }
+                })
+              },
+              fail: function (err) {
+                wx.showToast({
+                  title: '请重新报价',
+                  icon: 'error',
+                  duration: 2000,
+                  complete: function () {
+                    this.setData({
+                      inputPrice: ''
+                    })
+                  }
+                })
+              }
+            })
+          } else {
+            // 该用户报过价
+            // 3 更新报价
+            let auctionId = res.data[0]._id
+            painting.doc(_id).update({
+              data: {
+                price: cur,
+                buyer: wx.getStorageSync('openid')
+              },
+              success: function (res) {
+                auction.doc(auctionId).update({
+                  data: {
+                    price: cur
+                  },
+                  success: function (res) {
+                    wx.showToast({
+                      title: '成功更新报价',
+                      icon: 'success',
+                      duration: 2000
+                    })
+                    setTimeout(() => {
+                      wx.navigateBack({
+                        delta: 0,
+                      })
+                    }, 2000)
+                  }
+                })
+              },
+              fail: function (err) {
+                wx.showToast({
+                  title: '请重新报价',
+                  icon: 'error',
+                  duration: 2000,
+                  complete: function () {
+                    this.setData({
+                      inputPrice: ''
+                    })
+                  }
+                })
+              }
+            })
+          }
+        }
       })
-      wx.navigateBack({
-        delta: 0,
-      })
+
+
     }
   }
 

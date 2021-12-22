@@ -1,0 +1,40 @@
+<view class="container">
+  <!-- banner -->
+  <view class="banner">
+    <view class="bg">
+      <image src="{{CLOUD_BASE}}assets/banner@2x.png" mode="aspectFill"></image>
+    </view>
+    <view class="lenovo-logo">
+      <image src="{{CLOUD_BASE}}assets/lenovo-logo.svg" mode="aspectFill"></image>
+    </view>
+    <view class="banner-title">爱心公益油画拍卖</view>
+    <view class="banner-source">背景由研究院小绘智能生成</view>
+  </view>
+  <!-- content -->
+  <view class="content-wrapper">
+    <view class="content-title">爱心传递成功</view>
+    <view class="logo-and-avatar">
+      <image class="icon-heart" src="{{CLOUD_BASE}}assets/icon-heart.svg" mode="aspectFill"></image>
+      <image class="icon-multiply" src="{{CLOUD_BASE}}assets/icon-multiply.svg" mode="aspectFill"></image>
+      <image class="avatar" src="{{avatar}}" mode="aspectFill"></image>
+    </view>
+    <view class="content">
+      <view class="row-1">联想设计协会</view>
+      <view class="row-2">携手{{nickName}}捐出公益金</view>
+    </view>
+    <view class="price">¥{{price}}</view>
+    <view class="date">2021年12月24日通过联想设计协会，捐助公益项目。</view>
+  </view>
+  <!-- footer -->
+  <view class="footer">
+    <view class="footer-bg-wrapper">
+      <image class="footer-bg" src="{{CLOUD_BASE}}assets/footer-bg@2x.png" mode="aspectFill"></image>
+    </view>
+    <image class="qrcode-uxd" src="{{CLOUD_BASE}}assets/qrcode-uxd@2x.png" mode="aspectFill"></image>
+    <view class="footer-content">
+      <view>研究院UXD提供设计支持</view> 
+      <view>扫码关注来一起做设计吧</view>
+    </view>
+    <image class="text-do-design" src="{{CLOUD_BASE}}assets/text-do-design@2x.png" mode="aspectFill"></image>
+  </view>
+</view>

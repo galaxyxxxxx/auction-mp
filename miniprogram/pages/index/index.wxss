@@ -160,7 +160,7 @@
 .button {
   width: 258rpx;
   height: 80rpx;
-  background: #FF0000;
+  background: linear-gradient(to right, rgb(255, 96, 52), rgb(238, 10, 36));
   border-radius: 40rpx;
 
   display: flex;
@@ -171,7 +171,9 @@
 
 
 .count-down {
-  color: white;
+  font-size: 20rpx;
+  color: #FFFFFF;
+  line-height: 28rpx;
 }
 
 .button-auctioned {

@@ -6,16 +6,12 @@ const db = wx.cloud.database({
 })
 const painting = db.collection('painting')
 const user = db.collection('user')
-const auction = db.collection('auction')
-const _ = db.command
-const $ = db.command.aggregate
-
 
 Page({
   data: {
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
     openid: '',
-    paintings: []
+    paintings: [],
+    timeData: {}
   },
 
   onShow: function () {
@@ -33,6 +29,22 @@ Page({
     painting.get({
       success: function (res) {
         let paintings = res.data
+        // set status & count-down time
+        let now = Date.now()
+        paintings.forEach(cur => {
+          // 已到期,则查看是否是当前用户买中了
+          if (now > cur.deadline) {
+            if (cur.buyer === wx.getStorageSync('openid')) {
+              cur.status = 2
+            } else {
+              cur.status = 1
+            }
+          } else {
+            cur.status = 0
+            cur.time = (cur.deadline).getTime() - now
+          }
+          return cur
+        })
         that.setData({
           paintings: paintings
         })
@@ -45,27 +57,34 @@ Page({
 
   // 查看油画详情
   toDetail(e) {
-    let id = e.currentTarget.dataset.id
+    let _id = e.currentTarget.dataset._id
     wx.navigateTo({
-      url: '../painting/index?id=' + id,
+      url: `../painting/index?_id=${_id}`,
     })
   },
 
   // 出价
   toAuction(e) {
     let {
-      price
+      price,
+      _id
     } = e.currentTarget.dataset
     wx.navigateTo({
-      url: '../auction/index?price=' + price,
+      url: `../auction/index?_id=${_id}&price=${price}`,
+    })
+  },
+
+  // 倒计时更改事件
+  onChangeCountDown: function (e) {
+    this.setData({
+      timeData: e.detail
     })
   },
 
   // 下拉刷新
   onPullDownRefresh() {
     wx.showLoading()
-    this.initDate();
-    this.getLab();
+    this.getPaintings()
     wx.stopPullDownRefresh();
   },
 

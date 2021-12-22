@@ -3,13 +3,14 @@
     "pages/index/index",
     "pages/login/index",
     "pages/painting/index",
-    "pages/auction/index"
+    "pages/auction/index",
+    "pages/share/index"
   ],
   "window": {
     "backgroundColor": "#ffffff",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarTitleText": "LR Desgin",
+    "navigationBarTitleText": "LR Design",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json"

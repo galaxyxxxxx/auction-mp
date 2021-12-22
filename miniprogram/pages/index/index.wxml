@@ -4,7 +4,7 @@
   <view class="cards-wrapper">
     <block wx:for="{{paintings}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
       <!-- case：拍卖中 -->
-      <view class="card" bindtap="toDetail" data-id="{{item.id}}">
+      <view class="card" bindtap="toDetail" data-_id="{{item._id}}">
         <!-- poster -->
         <view class="poster-wrapper">
           <view class="poster">
@@ -25,14 +25,14 @@
           <view class="row-3">
             <view class="price-wrapper">
               <view class="price"><span class="price-prefix">￥</span>{{item.price}}</view>
-              <view class="price-title" wx:if="{{item.status!==0}}">当前拍价</view>
-              <view class="price-title" wx:if="{{item.status==1}}">成交价格</view>
+              <view class="price-title" wx:if="{{item.status===0}}">当前拍价</view>
+              <view class="price-title" wx:else>成交价格</view>
             </view>
-            <view class="button" wx:if="{{item.status!==0}}" catchtap="toAuction" data-price="{{item.price}}">
-              <view class="button-title" catchtap="toAuction" data-price="{{item.price}}">我要出价</view>
-              <view class="count-down" catchtap="toAuction" data-price="{{item.price}}">
-                <van-count-down time="{{item.time}}" format="HH 时 mm 分 ss 秒" />
-              </view>
+            <view class="button" wx:if="{{item.status===0}}" catchtap="toAuction" data-price="{{item.price}}" data-_id='{{item._id}}'>
+              <view class="button-title" catchtap="toAuction" data-price="{{item.price}}" data-_id='{{item._id}}'>我要出价</view>
+                <van-count-down time="{{item.time}}" bind:change="onChangeCountDown" use-slot>
+                  <view class='count-down'>{{timeData.days*24 + timeData.hours}}时{{timeData.minutes}}分{{timeData.seconds}}秒</view>
+                </van-count-down>
             </view>
             <view class="button button-auctioned" wx:if="{{item.status==1}}">已拍出</view>
             <view class="button button-my-auction" wx:if="{{item.status==2}}">我的拍中</view>
@@ -63,14 +63,7 @@
               <view class="price"><span class="price-prefix">￥</span>{{item.price}}</view>
               <view class="price-title">成交价格</view>
             </view>
-            <view class="button" wx:if="{{item.status==0}}">
-              <view class="button-title">我要出价</view>
-              <view class="count-down">
-                <van-count-down time="{{item.time}}" format="HH 时 mm 分 ss 秒" />
-              </view>
-            </view>
-            <view class="button button-auctioned" wx:if="{{item.status!==1}}">已拍出</view>
-            <view class="button button-my-auction" wx:if="{{item.status==2}}">我的拍中</view>
+            <view class="button button-auctioned">已拍出</view>
           </view>
         </view>
       </view>

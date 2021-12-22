@@ -1,0 +1,204 @@
+/* banner */
+.banner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner,
+.bg,
+.bg image {
+  width: 100vw;
+  height: 408rpx;
+}
+
+.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.lenovo-logo,
+.banner-title,
+.banner-source {
+  position: absolute;
+  z-index: 10;
+}
+
+.lenovo-logo,
+.lenovo-logo image {
+  width: 200rpx;
+  height: 44rpx;
+}
+
+.lenovo-logo {
+  left: 36rpx;
+  top: 36rpx;
+}
+
+.banner-title {
+  letter-spacing: 1rpx;
+  color: #FFFFFF;
+  font-size: 48rpx;
+  line-height: 64rpx;
+  font-weight: bold;
+}
+
+.banner-source {
+  color: #FFFFFF;
+  font-size: 24rpx;
+  line-height: 32rpx;
+  opacity: 0.4;
+  right: 24rpx;
+  bottom: 22rpx;
+}
+
+/* content */
+.content-wrapper {
+  width: 750rpx;
+  /* height: 742rpx; */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-title {
+  width: 614rpx;
+  height: 132rpx;
+  border-bottom: 2rpx solid rgba(151, 151, 151, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #1F3035;
+  font-weight: bold;
+  font-size: 42rpx;
+  line-height: 56rpx;
+}
+
+.logo-and-avatar {
+  width: 442rpx;
+  height: 242rpx;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icon-heart,
+.avatar {
+  width: 132rpx;
+  height: 132rpx;
+}
+
+.icon-multiply {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.content {
+  width: 750rpx;
+  height: 148rpx;
+  text-align: center;
+  color: #1F3035;
+}
+
+.row-1 {
+  font-size: 36rpx;
+  font-weight: bold;
+  line-height: 48rpx;
+}
+
+.row-2 {
+  margin-top: 6rpx;
+  font-size: 32rpx;
+  line-height: 42rpx;
+}
+
+.price {
+  width: 750rpx;
+  height: 194rpx;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 72rpx;
+  font-weight: bold;
+  color: #FF0000;
+  line-height: 96rpx;
+}
+
+.date {
+  width: 750rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #1F3035;
+  line-height: 38rpx;
+  padding-bottom: 38rpx;
+}
+
+/* footer */
+.footer {
+  width: 750rpx;
+  height: 184rpx;
+  position: relative;
+
+  box-sizing: border-box;
+  padding: 0 38rpx 0 44rpx;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-bg-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.footer-bg-wrapper,
+.footer-bg,
+.footer-bg image {
+  width: 750rpx;
+  height: 184rpx;
+}
+
+.qrcode-uxd,
+.footer-content,
+.text-do-design {
+  z-index: 10;
+}
+
+.qrcode-uxd,
+.qrcode-uxd image {
+  width: 116rpx;
+  height: 116rpx;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 272rpx;
+  height: 70rpx;
+  font-size: 24rpx;
+  line-height: 32rpx;
+  letter-spacing: 0;
+  color: #FFFFFF;
+}
+
+.text-do-design,
+.text-do-design image {
+  width: 200rpx;
+  height: 68rpx;
+}
