@@ -23,6 +23,18 @@
           "pathName": "pages/share/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/login/index",
+          "pathName": "pages/login/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/auction/index",
+          "pathName": "pages/auction/index",
+          "query": "_id=133e253361c2168b0184394003242def&imageID=cloud%3A%2F%2Fcloud1-9gnxu7n8fc1dd953.636c-cloud1-9gnxu7n8fc1dd953-1308907470%2Fpaintings%2Fpainting1.jpg&price=200",
+          "scene": null
         }
       ]
     }

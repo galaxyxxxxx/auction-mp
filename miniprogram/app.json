@@ -7,11 +7,11 @@
     "pages/share/index"
   ],
   "window": {
-    "backgroundColor": "#ffffff",
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#ffffff",
-    "navigationBarTitleText": "LR Design",
-    "navigationBarTextStyle": "black"
+    "backgroundColor": "#1e381e",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#1e381e",
+    "navigationBarTitleText": "联想设计协会",
+    "navigationBarTextStyle": "white"
   },
   "sitemapLocation": "sitemap.json"
 }

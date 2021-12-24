@@ -1,9 +1,8 @@
 <wxs src="../../wxs/subutil.wxs" module="tools" />
 <view class="container">
-  <van-notice-bar class='notice-bar' scrollable text="因拍出所得均用做公益，所有商品一经拍出，不能以任何理由退货" />
+  <van-notice-bar class='notice-bar' mode="closeable" scrollable text="因拍出所得均用做公益，所有商品一经拍出，不能以任何理由退货" />
   <view class="cards-wrapper">
     <block wx:for="{{paintings}}" wx:for-index="idx" wx:for-item="item" wx:key="idx">
-      <!-- case：拍卖中 -->
       <view class="card" bindtap="toDetail" data-_id="{{item._id}}">
         <!-- poster -->
         <view class="poster-wrapper">
@@ -11,13 +10,16 @@
             <image src="{{item.imageID}}" mode="scaleToFill "></image>
           </view>
           <view class="id">{{item.id}}号</view>
-          <view class="auction-count">已有{{item.count}}人参与竞拍</view>
+          <view class="auction-count">
+            <span wx:if="{{item.count == 0 }}">暂无人出价</span>
+            <span wx:else>已有{{item.count}}人参与竞拍</span>
+          </view>
         </view>
         <!-- description -->
         <view class="content-wrapper">
           <view class="row-1">
             <view class="name">{{item.name}}</view>
-            <view class="author">by {{item.author}}</view>
+            <view class="author">作者: {{item.author}}</view>
           </view>
           <view class="row-2">
             {{item.description}}
@@ -28,73 +30,21 @@
               <view class="price-title" wx:if="{{item.status===0}}">当前拍价</view>
               <view class="price-title" wx:else>成交价格</view>
             </view>
-            <view class="button" wx:if="{{item.status===0}}" catchtap="toAuction" data-price="{{item.price}}" data-_id='{{item._id}}'>
-              <view class="button-title" catchtap="toAuction" data-price="{{item.price}}" data-_id='{{item._id}}'>我要出价</view>
+            <view class="button" wx:if="{{item.status===0}}" catchtap="toAuction" data-price="{{item.price}}" data-imageID="{{item.imageID}}" data-_id='{{item._id}}'>
+              <view class="button-title" catchtap="toAuction" data-price="{{item.price}}" data-imageID="{{item.imageID}}" data-_id='{{item._id}}'>我要出价</view>
                 <van-count-down time="{{item.time}}" bind:change="onChangeCountDown" use-slot>
-                  <view class='count-down'>{{timeData.days*24 + timeData.hours}}时{{timeData.minutes}}分{{timeData.seconds}}秒</view>
+                  <view class='count-down'>{{timeData.hours}}时{{timeData.minutes}}分{{timeData.seconds}}秒</view>
                 </van-count-down>
             </view>
             <view class="button button-auctioned" wx:if="{{item.status==1}}">已拍出</view>
-            <view class="button button-my-auction" wx:if="{{item.status==2}}">我的拍中</view>
-          </view>
-        </view>
-      </view>
-      <!-- case: 已拍出 -->
-      <view class="card">
-        <!-- poster -->
-        <view class="poster-wrapper">
-          <view class="poster">
-            <image src="{{item.imageID}}" mode="scaleToFill "></image>
-          </view>
-          <view class="id">{{item.id}}号</view>
-          <view class="auction-count">已有{{item.count}}人参与竞拍</view>
-        </view>
-        <!-- description -->
-        <view class="content-wrapper">
-          <view class="row-1">
-            <view class="name">{{item.name}}</view>
-            <view class="author">by {{item.author}}</view>
-          </view>
-          <view class="row-2">
-            {{item.description}}
-          </view>
-          <view class="row-3">
-            <view class="price-wrapper">
-              <view class="price"><span class="price-prefix">￥</span>{{item.price}}</view>
-              <view class="price-title">成交价格</view>
-            </view>
-            <view class="button button-auctioned">已拍出</view>
-          </view>
-        </view>
-      </view>
-      <!-- case：我的拍中 -->
-      <view class="card">
-        <!-- poster -->
-        <view class="poster-wrapper">
-          <view class="poster">
-            <image src="{{item.imageID}}" mode="scaleToFill "></image>
-          </view>
-          <view class="id">{{item.id}}号</view>
-          <view class="auction-count">已有{{item.count}}人参与竞拍</view>
-        </view>
-        <!-- description -->
-        <view class="content-wrapper">
-          <view class="row-1">
-            <view class="name">{{item.name}}</view>
-            <view class="author">by {{item.author}}</view>
-          </view>
-          <view class="row-2">
-            {{item.description}}
-          </view>
-          <view class="row-3">
-            <view class="price-wrapper">
-              <view class="price"><span class="price-prefix">￥</span>{{item.price}}</view>
-              <view class="price-title">成交价格</view>
-            </view>
-            <view class="button button-my-auction">我的拍中</view>
+            <view class="button button-my-auction" wx:if="{{item.status==2}}">已拍中</view>
           </view>
         </view>
       </view>
     </block>
   </view>
+
+  <div class="bottom-tip">- 以上排名不分先后 - </div>
+  <view class="bottom-safe"></view>
+
 </view>

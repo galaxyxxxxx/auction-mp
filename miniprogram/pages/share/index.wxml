@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" >
   <!-- banner -->
   <view class="banner">
     <view class="bg">
@@ -38,3 +38,5 @@
     <image class="text-do-design" src="{{CLOUD_BASE}}assets/text-do-design@2x.png" mode="aspectFill"></image>
   </view>
 </view>
+
+<view class="press-tip" bindtap="savePhoto" wx:if="{{canSave}}">保存图片<image src="{{CLOUD_BASE}}assets/icon-download.svg"></image></view>

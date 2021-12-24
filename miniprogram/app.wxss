@@ -17,13 +17,25 @@ page {
 
   background: #ffffff;
 
-  --font-size-XL: 70rpx;
-  --font-size-L: 50rpx;
-  --font-size-M: 35rpx;
-  --font-size-S: 24rpx;
-  --font-size-XS: 20rpx;
+  --gray-text: #333333;
 
-  --color-theme: #3D78FF;
+  --green-dark: #1e381e;
+  --green-light: #009261;
 
-  letter-spacing: 1rpx;
+  --red-text: #e22b17;
+  --red-light: rgb(245, 80, 34);
+  --red-dark: rgb(221, 15, 15);
+
+  /* letter-spacing: 1rpx; */
+}
+
+.bottom-safe {
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  padding-top: constant(safe-area-inset-bottom);
+  /*兼容 IOS<11.2*/
+  padding-top: env(safe-area-inset-bottom);
+  /*兼容 IOS>11.2*/
+  background: transparent;
 }

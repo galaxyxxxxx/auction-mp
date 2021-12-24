@@ -6,19 +6,22 @@
         <image src="{{painting.imageID}}" mode="scaleToFill "></image>
       </view>
       <view class="id">{{painting.id}}号</view>
-      <view class="auction-count">已有{{painting.count}}人参与竞拍</view>
-      <view class="logo-auction" wx:if="{{painting.status!==0}}"><image src="{{logoAuction}}"></image></view>
+      <view class="auction-count">
+        <span wx:if="{{painting.count > 0 }}">已有{{painting.count}}人参与竞拍</span>
+        <span wx:else>暂无人出价</span>
+      </view>
+      <view class="logo-auction" wx:if="{{painting.status==1 || painting.status == 2}}"><image src="{{logoAuction}}"></image></view>
     </view>
     <!-- content -->
     <view class="content-wrapper">
       <view class="painting-detail">
         <view class="painting-name">{{painting.name}}</view>
-        <view class="painting-author">by {{painting.author}}</view>
+        <view class="painting-author">作者: {{painting.author}}</view>
       </view>
       <view class="painting-status" wx:if="{{painting.status == 0}}">
       仅剩：
       <van-count-down time="{{painting.time}}" bind:change="onChangeCountDown" use-slot>
-        <view class='count-down'>{{timeData.days*24 + timeData.hours}}时{{timeData.minutes}}分{{timeData.seconds}}秒</view>
+        <view class='count-down'>{{timeData.hours}}时{{timeData.minutes}}分{{timeData.seconds}}秒</view>
       </van-count-down>
       </view>
       <view class="painting-status" wx:else>已结束</view>
@@ -33,6 +36,7 @@
       </view>
       <view class="price"><span class="top-price" wx:if="{{idx===0}}">最高出价</span> ¥{{item.price}}</view>
     </view>
+    <view class="empty-tips" wx:if="{{list.length == 0}}">暂无出价，快来竞拍吧</view>
   </view>
   <!-- control-bar -->
   <view class="control-bar">
@@ -46,7 +50,7 @@
     <!-- case2 活动未结束 当前用户已出价 -->
     <view wx:if="{{painting.status===0 && myPrice!==''}}" class="buttons-wrapper">
       <view class="button button-myprice">我的出价: ¥{{myPrice}}</view>
-      <view class="button button-topay" bindtap="toAuction" data-price="{{painting.price}}" data-_id="{{painting._id}}">继续出价</view>
+      <view class="button button-topay" bindtap="toAuction" data-price="{{painting.price}}" data-_id="{{painting._id}}" data-imageid="{{painting.imageID}}">继续出价</view>
     </view>
     <!-- case3 活动已结束 当前用户没拍到 -->
     <view wx:if="{{painting.status===1 && myPrice!==''}}" class="buttons-wrapper">
@@ -60,7 +64,8 @@
     <!-- case5 活动已结束 当前用户拍到了 -->
     <view wx:if="{{painting.status===2}}" class="buttons-wrapper">
       <view class="tips"><span style="color: red;">恭喜您拍中此物品!</span> 请等待工作人员联系</view>
-      <view class="button button-share">点击分享</view>
+      <view class="button button-share" bindtap="toShare">点击分享</view>
+      <button open-type="share"></button>
     </view>
   </view>
 </view>

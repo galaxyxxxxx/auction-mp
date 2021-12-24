@@ -13,23 +13,32 @@ import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog';
 Page({
 
   data: {
-    price: 0,
     _id: 0,
-    inputPrice: ''
+    imageID: '',
+    price: 0,
+
+    avatar: wx.getStorageSync('avatarUrl'),
+    inputPrice: '',
+    CLOUD_BASE: CLOUD_BASE
   },
 
   onLoad: function (options) {
-    let price = options.price
-    let _id = options._id
+    let {
+      price,
+      _id,
+      imageID
+    } = options
     this.setData({
-      price: price,
-      _id: _id
+      price,
+      _id,
+      imageID
     })
   },
 
+
   confirmPrice(e) {
-    let cur = parseInt(e.detail) //当前用户的报价
     let _id = this.data._id
+    let cur = parseInt(this.data.inputPrice) //当前用户的报价
     let price = parseInt(this.data.price)
     // 1 检验报价是否合规
     if (cur <= price) {

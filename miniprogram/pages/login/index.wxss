@@ -1,3 +1,7 @@
+.container {
+  justify-content: flex-start;
+}
+
 .banner {
   position: relative;
   display: flex;
@@ -48,9 +52,10 @@
   color: #FFFFFF;
   font-size: 24rpx;
   line-height: 32rpx;
-  opacity: 0.4;
-  right: 24rpx;
+  opacity: 0.6;
+  /* right: 24rpx; */
   bottom: 22rpx;
+
 }
 
 .itcode-wrapper {
@@ -71,7 +76,7 @@
 }
 
 .itcode-wrapper>.tips {
-  color: #000000;
+  color: var(--gray-text);
   font-size: 20rpx;
   line-height: 28rpx;
   opacity: 0.4;
@@ -85,7 +90,7 @@
   width: 628rpx;
   height: 80rpx;
   border-radius: 40rpx;
-  background: #FF0000;
+  background: red;
   border: 1px solid #ffffff;
 
   display: flex;
@@ -101,6 +106,6 @@
 
 .login-button::after {
   height: 0;
-  border: 1px solid #ffffff;
+  border: 1rpx solid #ffffff;
   border-radius: 0 !important;
 }

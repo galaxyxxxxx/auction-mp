@@ -1,5 +1,5 @@
 .container {
-  background-color: #FAFBFA;
+  background-color: #EEEEEE;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -14,6 +14,12 @@
   position: relative;
 }
 
+.poster-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .poster {
   position: absolute;
 }
@@ -22,6 +28,16 @@
 .auction-count {
   position: absolute;
   z-index: 10;
+}
+
+.logo-auction {
+  z-index: 10;
+}
+
+.logo-auction,
+.logo-auction image {
+  width: 200rpx;
+  height: 176rpx;
 }
 
 .id {
@@ -35,7 +51,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #2D4E5B;
+  background-color: var(--green-light);
   color: #FFFFFF;
   font-weight: bold;
   line-height: 42rpx;
@@ -51,14 +67,13 @@
   height: 68rpx;
   box-sizing: border-box;
   padding-right: 24rpx;
-  background: #333333;
+  background: rgba(0, 0, 0, 0.8);
   color: #FFFFFF;
-  font-size: 24rpx;
+  font-size: 28rpx;
   line-height: 32rpx;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  opacity: 0.8;
 }
 
 /* content */
@@ -80,9 +95,9 @@
 }
 
 .painting-name {
-  color: #333333;
-  font-size: 32rpx;
+  color: var(--gray-text);
   font-weight: bold;
+  font-size: 32rpx;
   line-height: 42rpx;
 }
 
@@ -90,23 +105,21 @@
   display: flex;
   height: 32rpx;
   align-items: center;
-  color: #333333;
-  font-size: 24rpx;
-  line-height: 32rpx;
+  color: var(--gray-text);
+  font-size: 32rpx;
+  line-height: 42rpx;
 }
 
 .count-down {
-  color: rgba(255, 0, 0, 1);
-  font-size: 24rpx;
-  line-height: 32rpx;
-  
-
+  color: var(--red-text);
+  font-size: 32rpx;
+  line-height: 42rpx;
 }
 
 .painting-author {
-  font-size: 24rpx;
-  color: #333333;
-  line-height: 32rpx;
+  color: var(--gray-text);
+  font-size: 32rpx;
+  line-height: 42rpx;
   opacity: 0.4;
   margin-left: 16rpx;
 }
@@ -149,7 +162,7 @@
 
 .name {
   margin-left: 22rpx;
-  color: #000000;
+  color: var(--gray-text);
   font-size: 24rpx;
   line-height: 32rpx;
   opacity: 0.6;
@@ -158,7 +171,7 @@
 .price {
   font-size: 36rpx;
   font-weight: bold;
-  color: #FF0000;
+  color: var(--red-text);
   line-height: 38rpx;
 
   display: flex;
@@ -175,11 +188,12 @@
   justify-content: center;
   align-items: center;
 
+  color: #D66000;
   font-size: 20rpx;
-  color: #000000;
   line-height: 28rpx;
 
   margin-right: 16rpx;
+  font-weight: normal;
 }
 
 .control-bar {
@@ -211,7 +225,7 @@
 
 .price-title {
   font-size: 20rpx;
-  color: #000000;
+  color: var(--gray-text);
   line-height: 28rpx;
   opacity: 0.4;
 }
@@ -234,7 +248,7 @@
 
 .button-myprice {
   width: 234rpx;
-  color: #000000;
+  color: var(--gray-text);
   background: #FEF38F;
 }
 
@@ -248,7 +262,7 @@
 }
 
 .tips {
-  color: #000000;
+  color: var(--gray-text);
   font-size: 20rpx;
   line-height: 28rpx;
   letter-spacing: 0;

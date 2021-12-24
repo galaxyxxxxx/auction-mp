@@ -1,7 +1,31 @@
+<wxs src="../../wxs/subutil.wxs" module="tools" />
 <view class="container">
+  <view class="banner">
+    <view class="bg"><image src="{{CLOUD_BASE}}assets/auction-bg.png"></image></view>
+    <view class="bg-front"><image src="{{CLOUD_BASE}}assets/auction-bg-front.png"></image></view>
+    <view class="content-wrapper">
+
+      <view class="row-1">
+        <view class="logo">
+          <image src="{{CLOUD_BASE}}assets/chirstmas-man.svg"></image>
+        </view>
+      </view>
+
+      <view class="row-2">
+      <view class="painting"><image src="{{imageID}}" mode="aspectFill"></image></view>
+        
+      </view>
+      <view class="row-3">
+        <view class="avatar"><image src="{{avatar}}"></image></view>
+      </view>
+    </view>
+  </view>
   <view class="wrapper">
-    <van-field input-class="input-title" model:value="{{ inputPrice }}" placeholder="请您输入出价金额" input-align="center" border="{{ false }}" bind:confirm="confirmPrice" type="number" auto-focus="{{true}}" />
+    <van-field input-class="input-title" model:value="{{ inputPrice }}" placeholder="请您输入出价金额" maxlength="4" input-align="center" border="{{ false }}" bind:confirm="confirmPrice" type="number" auto-focus="{{true}}" />
     <view class="tips">出价金额需不低于￥{{price}}</view>
+  </view>
+  <view class="button-confirm" bindtap="confirmPrice" style="opacity: {{inputPrice == '' ? 0 : 1}}">
+    确认拍下
   </view>
 </view>
 <van-dialog id="van-dialog" />

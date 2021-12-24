@@ -1,9 +1,16 @@
-/* 顶部滚动条 高10%*/
+.container {
+  background-color: var(--green-dark);
+}
 
+/* 顶部滚动条 高10%*/
 .notice-bar {
   width: 100vw;
   height: 72rpx;
   margin-bottom: 18rpx;
+}
+
+van-icon {
+  height: 40rpx !important;
 }
 
 .cards-wrapper {
@@ -14,9 +21,8 @@
 
 .card {
   width: 724rpx;
-  height: 906rpx;
+  height: calc(994rpx + 36rpx + 8rpx);
   margin-bottom: 18rpx;
-  box-shadow: 0 4rpx 8rpx 0 rgba(229, 229, 229, 0.5);
   border-radius: 16rpx;
   overflow: hidden;
 }
@@ -25,8 +31,9 @@
 .poster,
 .poster image {
   width: 724rpx;
-  height: 636rpx;
+  height: 724rpx;
   position: relative;
+  background-color: #f1f1f1;
 }
 
 .poster {
@@ -50,7 +57,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #2D4E5B;
+  background-color: var(--green-light);
   color: #FFFFFF;
   font-weight: bold;
   line-height: 42rpx;
@@ -66,21 +73,23 @@
   height: 68rpx;
   box-sizing: border-box;
   padding-right: 24rpx;
-  background: #000000;
-  color: #FFFFFF;
-  font-size: 24rpx;
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 4rpx solid #f8f9f8;
+  color: var(--gray-text);
+  font-size: 28rpx;
   line-height: 32rpx;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  opacity: 0.8;
 }
 
 .content-wrapper {
   width: 724rpx;
-  height: 270rpx;
+  height: calc(270rpx + 36rpx + 8rpx);
   box-sizing: border-box;
-  padding: 24rpx 24rpx 24rpx 40rpx;
+  padding: 24rpx 24rpx 32rpx 40rpx;
+
+  background-color: #FFFFFF;
 
   display: flex;
   flex-direction: column;
@@ -95,31 +104,34 @@
   justify-content: space-between;
   align-items: center;
 
-
 }
 
 .row-1>.name {
-  color: #000000;
-  font-size: 32rpx;
+  color: var(--gray-text);
+  font-size: 40rpx;
   font-weight: bold;
   line-height: 42rpx;
 }
 
 .author {
-  font-size: 24rpx;
-  color: #000000;
+  font-size: 32rpx;
+  color: var(--gray-text);
   line-height: 32rpx;
   opacity: 0.4;
 }
 
 .row-2 {
   width: calc(724rpx - 40rpx - 24rpx);
-  height: 72rpx;
+  height: calc(72rpx + 12rpx);
 
-  font-size: 24rpx;
-  color: #000000;
-  line-height: 32rpx;
+  font-size: 28rpx;
+  color: var(--gray-text);
+  line-height: 40rpx;
   opacity: 0.6;
+
+  text-align: justify;
+
+  padding-bottom: 12rpx;
 }
 
 .row-3 {
@@ -132,7 +144,7 @@
 
 .price-wrapper {
   width: 142rpx;
-  height: 82rpx;
+  height: 74rpx;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -140,19 +152,19 @@
 }
 
 .price {
-  font-size: 36rpx;
+  font-size: 42rpx;
   font-weight: bold;
-  color: #FF0000;
+  color: var(--red-text);
   line-height: 38rpx;
 }
 
 .price-prefix {
-  font-size: 28rpx;
+  font-size: 36rpx;
 }
 
 .price-title {
-  font-size: 20rpx;
-  color: #000000;
+  font-size: 28rpx;
+  color: var(--gray-text);
   line-height: 28rpx;
   opacity: 0.4;
 }
@@ -160,7 +172,7 @@
 .button {
   width: 258rpx;
   height: 80rpx;
-  background: linear-gradient(to right, rgb(255, 96, 52), rgb(238, 10, 36));
+  background: linear-gradient(to right, var(--red-light), var(--red-dark));
   border-radius: 40rpx;
 
   display: flex;
@@ -192,4 +204,12 @@
 
 .button-my-auction {
   background: #565FFF;
+}
+
+.bottom-tip {
+  width: 100%;
+  text-align: center;
+  font-size: 24rpx;
+  line-height: 3;
+  color: rgba(255, 255, 255, 0.6);
 }

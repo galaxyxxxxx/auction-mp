@@ -27,18 +27,20 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.showLoading()
     this.setData({
       _id: options._id,
     })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow: function () {
     let _id = this.data._id
     this.getPaintingDetail(_id)
     this.getAuctionList(_id)
+  },
+
+  onReady: function () {
+    wx.hideLoading()
   },
 
   // 查询所有油画
@@ -96,8 +98,9 @@ Page({
 
   // 倒计时更改事件
   onChangeCountDown: function (e) {
+    let timeData = e.detail
     this.setData({
-      timeData: e.detail
+      timeData: timeData
     })
   },
 
@@ -105,10 +108,18 @@ Page({
   toAuction(e) {
     let {
       price,
-      _id
+      _id,
+      imageid
     } = e.currentTarget.dataset
+    console.log(e)
     wx.navigateTo({
-      url: `../auction/index?_id=${_id}&price=${price}`,
+      url: `../auction/index?_id=${_id}&imageID=${imageid}&price=${price}`,
+    })
+  },
+
+  toShare() {
+    wx.navigateTo({
+      url: '../share/index?price=' + this.data.myPrice,
     })
   },
 
@@ -116,20 +127,29 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
+    wx.showLoading();
+    this.onShow();
+    setTimeout(() => {
+      wx.hideLoading();
+      wx.stopPullDownRefresh()
+    }, 1000)
   },
 
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    const promise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          title: `爱心公益油画作品-${title}`
+        })
+      }, 2000)
+    })
+    return {
+      title: '自定义转发标题',
+      path: '/page/user?id=123',
+      promise
+    }
   }
 })

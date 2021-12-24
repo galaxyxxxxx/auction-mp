@@ -68,8 +68,6 @@ Page({
                   console.log('增加用户个人信息失败', err);
                 }
               });
-            } else {
-              console.log('???', res.data.length)
             }
           },
           fail: function (err) {

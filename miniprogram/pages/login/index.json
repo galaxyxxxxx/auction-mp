@@ -1,4 +1,9 @@
 {
+  "backgroundColor": "#ffffff",
+  "backgroundTextStyle": "light",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTitleText": "联想设计协会",
+  "navigationBarTextStyle": "black",
   "usingComponents": {
     "van-field": "@vant/weapp/field/index"
   }

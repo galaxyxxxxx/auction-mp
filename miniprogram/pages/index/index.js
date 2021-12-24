@@ -11,22 +11,30 @@ Page({
   data: {
     openid: '',
     paintings: [],
-    timeData: {}
+    timeData: {},
+    showNoticeBar: true,
+  },
+
+  onLoad: function () {
+    wx.showLoading()
   },
 
   onShow: function () {
     this.setData({
       openid: wx.getStorageSync('openid')
     })
-
     this.getPaintings()
+  },
+
+  onReady: function () {
+    wx.hideLoading()
   },
 
 
   // 查询所有油画
   getPaintings: function () {
     let that = this
-    painting.get({
+    painting.orderBy('id', 'asc').get({
       success: function (res) {
         let paintings = res.data
         // set status & count-down time
@@ -67,31 +75,37 @@ Page({
   toAuction(e) {
     let {
       price,
-      _id
+      _id,
+      imageid
     } = e.currentTarget.dataset
+    console.log(e)
     wx.navigateTo({
-      url: `../auction/index?_id=${_id}&price=${price}`,
+      url: `../auction/index?_id=${_id}&imageID=${imageid}&price=${price}`,
     })
   },
 
   // 倒计时更改事件
   onChangeCountDown: function (e) {
+    let timeData = e.detail
     this.setData({
-      timeData: e.detail
+      timeData: timeData
     })
   },
 
   // 下拉刷新
   onPullDownRefresh() {
-    wx.showLoading()
-    this.getPaintings()
-    wx.stopPullDownRefresh();
+    wx.showLoading();
+    this.getPaintings();
+    setTimeout(() => {
+      wx.hideLoading();
+      wx.stopPullDownRefresh()
+    }, 1000)
   },
 
   // 分享
   onShareAppMessage: function (res) {
     return {
-      title: "研究院油画公益拍卖",
+      title: "联想设计协会 ｜ 油画公益拍卖活动",
       path: '../index/index'
     }
   },

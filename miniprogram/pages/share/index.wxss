@@ -1,3 +1,7 @@
+.container {
+  position: absolute;
+}
+
 /* banner */
 .banner {
   position: relative;
@@ -66,8 +70,9 @@
 }
 
 .content-title {
+  position: relative;
   width: 614rpx;
-  height: 132rpx;
+  height: 160rpx;
   border-bottom: 2rpx solid rgba(151, 151, 151, 0.2);
   display: flex;
   justify-content: center;
@@ -77,6 +82,29 @@
   font-weight: bold;
   font-size: 42rpx;
   line-height: 56rpx;
+}
+
+/* longpress-tip */
+.press-tip {
+  z-index: 100;
+  width: 200rpx;
+  height: 60rpx;
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  filter: brightness(10);
+
+  font-size: 32rpx;
+  color: #FFFFFF;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.press-tip image {
+  width: 60rpx;
+  height: 60rpx;
 }
 
 .logo-and-avatar {
@@ -132,7 +160,7 @@
 
   font-size: 72rpx;
   font-weight: bold;
-  color: #FF0000;
+  color: var(--red-text);
   line-height: 96rpx;
 }
 

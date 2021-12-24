@@ -8,7 +8,7 @@
         <image src="{{CLOUD_BASE}}assets/lenovo-logo.svg" mode="aspectFill"></image>
       </view>
       <view class="title">爱心公益油画拍卖</view>
-      <view class="tips">背景由研究院小绘智能生成</view>
+      <view class="tips">背景由联想研究院小绘智能生成</view>
     </view>
 
     <view class="itcode-wrapper">
@@ -16,7 +16,7 @@
       <view class="tips">信息仅用于本次拍卖活动的领取环节</view>
     </view>
 
-    <button class='login-button' open-type="getUserInfo" lang="zh_CN" bindtap="getUserProfile" disabled="{{itcode===''}}">
+    <button class='login-button' open-type="getUserInfo" lang="zh_CN" bindtap="getUserProfile" disabled="{{itcode==''}}">
       开始竞拍
     </button>
 
